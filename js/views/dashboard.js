@@ -136,7 +136,7 @@ export function renderDashboard(container, ctx) {
   } else {
     const emptyCard = document.createElement("article");
     emptyCard.className = "card";
-    emptyCard.innerHTML = `<h3 class="display-decor">${escapeHtml(decorateCardTitle("Willkommen"))}</h3><p>Starte deinen ersten Wochenrückblick — die Journey beginnt hier.</p>`;
+    emptyCard.innerHTML = `<h3 class="display-decor">${escapeHtml(decorateCardTitle("Willkommen"))}</h3><p>Starte deinen ersten Wochenrückblick. Die Journey beginnt hier.</p>`;
     grid.appendChild(emptyCard);
   }
 
