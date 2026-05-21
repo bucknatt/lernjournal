@@ -61,6 +61,9 @@
   --font-size-title-page: clamp(2.35rem, 6vw, 3.25rem);
   --font-size-title-section: 1.85rem;
   --font-size-title-card: 1.55rem;
+
+  --miku-week-range: color-mix(in srgb, var(--palette-pop-sun) 42%, white);
+  --miku-week-range-glow: color-mix(in srgb, var(--palette-pop-sun) 55%, transparent);
   --radius-sm: 0.5rem;
   --radius-md: 0.85rem;
   --radius-lg: 1.25rem;
@@ -152,14 +155,4 @@ body[data-miku-theme="SnowMiku"] {
     color-mix(in srgb, white 10%, color-mix(in srgb, var(--palette-pop-pink-soft) 12%, var(--miku-bg))) 70%,
     color-mix(in srgb, var(--palette-pop-sun) 8%, var(--miku-bg)) 100%
   );
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
 }

@@ -64,12 +64,16 @@ body {
   line-height: 1.45;
 }
 
-/* Week range (KW · dates) — readable body font, not display font */
+/* Week range (KW · dates) — Nunito + Miku sun accent */
 .week-range-label {
   font-family: var(--font-body);
   font-weight: 700;
   font-size: 1.05rem;
-  color: var(--miku-text);
+  color: var(--miku-week-range);
+  text-shadow:
+    0 0 0.65rem var(--miku-week-range-glow),
+    0 0 1.35rem var(--miku-week-range-glow),
+    0 0 2.25rem color-mix(in srgb, var(--palette-pop-sun) 28%, transparent);
   margin: 0.25rem 0 0;
 }
 

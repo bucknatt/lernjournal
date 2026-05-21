@@ -28,7 +28,7 @@ export function renderDashboard(container, ctx) {
 
   renderAppHeader(container, {
     title: "Lernjournal",
-    subtitle: "Deine Lernreise — Wochenrückblick & Reflexion"
+    subtitle: "Wochenrückblick & Selbstreflexion"
   });
 
   renderAppToolbar(container, ctx);
@@ -77,7 +77,7 @@ export function renderDashboard(container, ctx) {
   const streakCard = document.createElement("article");
   streakCard.className = "card";
   streakCard.innerHTML = `
-    <h3 class="display-decor">${escapeHtml(decorateCardTitle("Streak"))}</h3>
+    <h3 class="display-decor">${escapeHtml(decorateCardTitle("Achievements"))}</h3>
     <p><strong>${streak}</strong> Woche(n) in Folge abgeschlossen · <strong>${completed}</strong> gesamt</p>
   `;
   grid.appendChild(streakCard);

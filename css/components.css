@@ -291,6 +291,9 @@
   font-weight: 400;
   line-height: 1.2;
   color: var(--miku-accent-warm);
+  text-shadow:
+    0 0 0.5rem color-mix(in srgb, var(--miku-accent-warm) 40%, transparent),
+    0 0 1rem color-mix(in srgb, var(--miku-pop) 22%, transparent);
 }
 
 .settings-panel label {
