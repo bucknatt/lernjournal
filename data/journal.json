@@ -11,7 +11,7 @@
       "wentWell": "Die Gesamtstory (Inventory → Account-Terraform → GitHub Environments → Workflow) liess sich in einer kleinen Doku auf Confluence festhalten. Der Workflow spiegelt das Jenkins-Verhalten (Container aws-cli, Sync, Wartezeit/CDN-Check) gut wider. Die Checkliste gibt einen klaren Pfad für int- und main-Tests.",
       "wentPoorly": "Noch offen: Terraform Erstellung für github_oidc.tf.",
       "helpedBy": "Bestehende postfonts/Jenkins-Pipeline und Terraform in awsm04ln0014/awsm04lp0014 als Referenz, ich konnte die Logik übernehmen und in Github Actions umsetzen.",
-      "improvements": "Nächste Woche Inventory-PR und TFE-Apply Schritte mit Verantwortlichen abstimmen. Wäre cool: Github Actions CI/CP Pipeline testen.",
+      "improvements": "Nächste Woche Inventory-PR und TFE-Apply Schritte. Wäre cool: Github Actions CI/CP Pipeline testen.",
       "goal1": "JavaScript-Tutorial fortsetzen",
       "goal2": "Mit Platform/Cloud Team klären: Self-Hosted-Runner ok? CI/CD Pipeline testen und auf main pushen.",
       "createdAt": "2026-05-21T12:00:00.000Z",

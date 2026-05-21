@@ -40,6 +40,9 @@ Each entry covers one calendar week and includes:
 
 - **Source of truth:** [`data/journal.json`](data/journal.json) in the repository (versioned with Git).
 - **Draft cache:** browser `localStorage` (autosave while typing). On startup the app loads the **file first**; if an older browser draft differs, choose **Datei behalten** or **Entwurf laden** in the banner.
+- **Saving to disk:** `Speichern` does **not** update `data/journal.json` by itself. For local git workflow either:
+  1. **Link the file** (Chrome/Edge on `localhost`): **Sync & Backup → data/journal.json verknüpfen** — then every save writes to that file, or
+  2. **Export:** **Export für Git** / **JSON exportieren** → replace `data/journal.json` → commit.
 
 ## How to sync across multiple devices
 

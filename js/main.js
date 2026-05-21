@@ -5,6 +5,7 @@ import { initTheme } from "./utils/theme.js";
 async function bootstrap() {
   try {
     initTheme();
+    await journalStore.prepare();
     await journalStore.init();
     initRouter();
   } catch (err) {

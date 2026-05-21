@@ -86,7 +86,16 @@ export function renderWeekEditor(container, weekKeyParam, ctx) {
 
   const hint = document.createElement("p");
   hint.className = "autosave-hint";
-  hint.textContent = "Änderungen werden automatisch lokal gespeichert.";
+  const state = journalStore.getState();
+  if (state.linkedFileName) {
+    hint.textContent = `Änderungen werden im Browser und in ${state.linkedFileName} gespeichert.`;
+  } else if (state.fileSyncSupported) {
+    hint.textContent =
+      "Änderungen werden im Browser gespeichert. Für Git: unter Sync & Backup «data/journal.json verknüpfen» oder «Export für Git».";
+  } else {
+    hint.textContent =
+      "Änderungen werden im Browser gespeichert. Für Git: «Export für Git» → Datei nach data/journal.json kopieren.";
+  }
   form.appendChild(hint);
 
   const actions = document.createElement("div");
@@ -143,9 +152,17 @@ export function renderWeekEditor(container, weekKeyParam, ctx) {
     return updated;
   }
 
-  function flush(showMsg) {
+  async function flush(showMsg) {
     journalStore.upsertEntry(collectEntry());
-    if (showMsg) showToast("Gespeichert (lokal).");
+    if (!showMsg) return;
+    const fileResult = await journalStore.writeToLinkedFile();
+    if (fileResult.ok) {
+      showToast(`Gespeichert in Browser und ${journalStore.getState().linkedFileName}.`);
+    } else if (fileResult.reason === "not-linked") {
+      showToast("Im Browser gespeichert. Für Git: Datei verknüpfen oder «Export für Git».");
+    } else {
+      showToast("Im Browser gespeichert; Schreibzugriff auf die Datei verweigert.", "error");
+    }
   }
 
   function scheduleAutosave() {

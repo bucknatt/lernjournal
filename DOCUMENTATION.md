@@ -70,8 +70,9 @@ Clearing dirty state:
 
 | Action | What happens |
 |--------|----------------|
-| Typing in editor | `upsertEntry` → `_touch` → `localStorage` draft |
-| Export JSON | Downloads `journal.json`; user commits to git manually |
+| Typing in editor | `upsertEntry` → `_touch` → `localStorage` draft (+ linked file if configured) |
+| Link `data/journal.json` | File System Access API (Chromium, `localhost`) — `writeToLinkedFile` on each `_touch` |
+| Export JSON | Downloads `journal.json`; user commits to git manually (all browsers) |
 | Reload from file | `reloadFromFile()` → `replaceJournal` |
 | GitHub load | API GET → `replaceJournal` |
 | GitHub save | API PUT with `sha` → `markSyncedFromRepo` |

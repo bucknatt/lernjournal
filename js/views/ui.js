@@ -220,6 +220,58 @@ export function renderSettingsPanel(parent, ctx) {
   btnRow.append(exportBtn, importBtn, reloadBtn);
   panel.appendChild(btnRow);
 
+  const state = journalStore.getState();
+  const fileRow = document.createElement("div");
+  fileRow.className = "btn-group";
+  fileRow.style.marginTop = "0.5rem";
+
+  if (state.fileSyncSupported) {
+    const linkHint = document.createElement("p");
+    linkHint.className = "muted";
+    linkHint.style.fontSize = "0.85rem";
+    linkHint.style.margin = "0 0 0.5rem";
+    linkHint.textContent = state.linkedFileName
+      ? `Verknüpft mit: ${state.linkedFileName} — Speichern schreibt direkt in die Datei (git push).`
+      : "Verknüpfe data/journal.json, damit Speichern die Projektdatei aktualisiert (Chrome/Edge, localhost).";
+    panel.appendChild(linkHint);
+
+    const linkBtn = document.createElement("button");
+    linkBtn.type = "button";
+    linkBtn.className = "btn btn-small";
+    linkBtn.textContent = state.linkedFileName ? "Andere Datei wählen" : "data/journal.json verknüpfen";
+    linkBtn.onclick = async () => {
+      try {
+        const name = await journalStore.linkLocalFile();
+        showToast(`Verknüpft mit ${name}.`);
+        ctx.navigateTo(location.hash || "#/");
+      } catch (e) {
+        showToast(/** @type {Error} */ (e).message, "error");
+      }
+    };
+
+    const unlinkBtn = document.createElement("button");
+    unlinkBtn.type = "button";
+    unlinkBtn.className = "btn btn-ghost btn-small";
+    unlinkBtn.textContent = "Verknüpfung lösen";
+    unlinkBtn.disabled = !state.linkedFileName;
+    unlinkBtn.onclick = async () => {
+      await journalStore.unlinkLocalFile();
+      showToast("Dateiverknüpfung entfernt.");
+      ctx.navigateTo(location.hash || "#/");
+    };
+
+    fileRow.append(linkBtn, unlinkBtn);
+  } else {
+    const fileHint = document.createElement("p");
+    fileHint.className = "muted";
+    fileHint.style.fontSize = "0.85rem";
+    fileHint.textContent =
+      "Direktes Schreiben in data/journal.json ist in diesem Browser nicht möglich — nutze «JSON exportieren» und ersetze die Datei manuell.";
+    panel.appendChild(fileHint);
+  }
+
+  panel.appendChild(fileRow);
+
   const ghRow = document.createElement("div");
   ghRow.className = "btn-group";
   ghRow.style.marginTop = "0.5rem";

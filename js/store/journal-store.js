@@ -4,6 +4,14 @@ import {
   normalizeEntry
 } from "../models/journal.js";
 import { fetchJournalFromRepo, downloadJournalJson, importJournalFromFile } from "../api/load-journal.js";
+import {
+  getLinkedFileName,
+  isLocalFileSyncSupported,
+  linkJournalFile,
+  restoreLinkedJournalFile,
+  unlinkJournalFile,
+  writeJournalToLinkedFile
+} from "../api/local-file-sync.js";
 import { getWeekKey, getPreviousWeekKey, buildTimelineWeekKeys } from "../utils/dates.js";
 
 const DRAFT_STORAGE_KEY = "lernjournal-draft-v1";
@@ -60,6 +68,10 @@ function syncLocalCacheToJournal() {
 }
 
 export const journalStore = {
+  async prepare() {
+    await restoreLinkedJournalFile();
+  },
+
   async init() {
     const fromRepo = await fetchJournalFromRepo();
     const draft = loadDraftFromLocalStorage();
@@ -87,8 +99,37 @@ export const journalStore = {
       isDirty: syncedSnapshot !== null && snapshot(journal) !== syncedSnapshot,
       hasConflict: pendingConflict !== null,
       dataSource,
+      linkedFileName: getLinkedFileName(),
+      fileSyncSupported: isLocalFileSyncSupported(),
       currentWeekKey: getWeekKey()
     };
+  },
+
+  async linkLocalFile() {
+    const name = await linkJournalFile();
+    await journalStore.writeToLinkedFile();
+    return name;
+  },
+
+  async unlinkLocalFile() {
+    await unlinkJournalFile();
+    notify();
+  },
+
+  /**
+   * Write in-memory journal to a linked data/journal.json (File System Access API).
+   * @returns {Promise<{ ok: true } | { ok: false; reason: string }>}
+   */
+  async writeToLinkedFile() {
+    const result = await writeJournalToLinkedFile(journal);
+    if (result.ok) {
+      syncedSnapshot = snapshot(journal);
+      pendingConflict = null;
+      dataSource = "file";
+      syncLocalCacheToJournal();
+      notify();
+    }
+    return result;
   },
 
   subscribe(fn) {
@@ -172,6 +213,7 @@ export const journalStore = {
     setUnsavedFlag(true);
     persistDraftToLocalStorage();
     notify();
+    void journalStore.writeToLinkedFile();
   },
 
   replaceJournal(newJournal) {
