@@ -1,4 +1,21 @@
 {
   "version": 1,
-  "entries": []
+  "entries": [
+    {
+      "weekKey": "2026-W21",
+      "status": "complete",
+      "datum": "2026-05-21",
+      "done": "Diese Woche habe ich die Migration der Font-Deployments von Bitbucket postfonts (Jenkins) nach GitHub im Repository postch/spds-assets vorangetrieben. Konkret: GitHub-Workflow deploy-fonts.yaml mit OIDC-Anbindung an AWS (Rollen github-actions-oidc-role statt statischer AWS-Keys), S3-Sync nach fonts-post-ch-int (Branch int) und fonts-post-ch-prod (Branch main), inkl. verify-asset-Job und Smoke-Check auf fonts.int.post.ch vor Production. Zusätzlich einen Draft-Workflow für Container-Probes auf dem EKS-Self-Hosted-Runner erstellt und die Dokumentation ausgebaut (Terraform-Walkthrough über Inventory, awsm04ln0014/awsm04lp0014-resources, GitHub-Environments, E2E-Checkliste, Migration von postfonts, Runner/Container-Hinweise). README und Verknüpfung der beteiligten Repositories ergänzt.",
+      "methods": "Repository-Analyse und Vergleich mit dem Legacy-Jenkinsfile; Erstellung und Review von GitHub Actions (YAML); Dokumentation in Markdown (Mermaid-Diagramm für Architektur); Abgleich mit Terraform in awsm04ln0014-resources / awsm04lp0014-resources (github_oidc.tf, S3-IAM); manuelle Prüfung der public/swiss-post-sans/v1-Struktur.",
+      "learned": "Fachlich: Wie GitHub OIDC mit AWS IAM (AssumeRoleWithWebIdentity) für CI/CD funktioniert und warum dafür zuerst Inventory (github_oidc = postch/spds-assets) und Account-Terraform nötig sind. Unterschied zwischen Bucket-ARN und Object-ARN (/*) bei S3-Policies. Dass aws s3 sync --delete mit Dry-Run und Secret S3_ALLOW_DELETES kontrolliert werden kann, ähnlich wie im alten Jenkins, aber expliziter. Persönlich: Komplexe Plattform-Themen strukturierter erklären (Dokumentieren auf Confluence), und Abhängigkeiten zwischen mehreren Repos klarer halten.",
+      "wentWell": "Die Gesamtstory (Inventory → Account-Terraform → GitHub Environments → Workflow) liess sich in einer kleinen Doku auf Confluence festhalten. Der Workflow spiegelt das Jenkins-Verhalten (Container aws-cli, Sync, Wartezeit/CDN-Check) gut wider. Die Checkliste gibt einen klaren Pfad für int- und main-Tests.",
+      "wentPoorly": "Noch offen: Terraform Erstellung für github_oidc.tf.",
+      "helpedBy": "Bestehende postfonts/Jenkins-Pipeline und Terraform in awsm04ln0014/awsm04lp0014 als Referenz, ich konnte die Logik übernehmen und in Github Actions umsetzen.",
+      "improvements": "Nächste Woche Inventory-PR und TFE-Apply Schritte mit Verantwortlichen abstimmen. Wäre cool: Github Actions CI/CP Pipeline testen.",
+      "goal1": "JavaScript-Tutorial fortsetzen",
+      "goal2": "Mit Platform/Cloud Team klären: Self-Hosted-Runner ok? CI/CD Pipeline testen und auf main pushen.",
+      "createdAt": "2026-05-21T12:00:00.000Z",
+      "updatedAt": "2026-05-21T20:00:00.000Z"
+    }
+  ]
 }
