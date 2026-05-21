@@ -1,4 +1,5 @@
 import { journalStore } from "../store/journal-store.js";
+import { renderThemeSwitcher } from "../utils/theme.js";
 
 /**
  * @param {string} message
@@ -47,6 +48,54 @@ export function renderAppHeader(container, { title, subtitle, backHref, backLabe
   header.appendChild(text);
   container.appendChild(header);
   return header;
+}
+
+/**
+ * Global toolbar: theme switcher + optional quick search.
+ * @param {HTMLElement} container
+ * @param {{ navigateTo: (hash: string) => void }} ctx
+ * @param {{ showSearch?: boolean }} [opts]
+ */
+export function renderAppToolbar(container, ctx, opts = {}) {
+  const showSearch = opts.showSearch !== false;
+  const bar = document.createElement("div");
+  bar.className = "app-toolbar";
+
+  if (showSearch) {
+    const searchWrap = document.createElement("form");
+    searchWrap.className = "toolbar-search";
+    searchWrap.setAttribute("role", "search");
+
+    const searchInput = document.createElement("input");
+    searchInput.type = "search";
+    searchInput.className = "search-input";
+    searchInput.placeholder = "Journal durchsuchen…";
+    searchInput.setAttribute("aria-label", "Journal durchsuchen");
+
+    searchWrap.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const q = searchInput.value.trim();
+      if (q.length < 2) {
+        showToast("Mindestens 2 Zeichen für die Suche.", "error");
+        return;
+      }
+      ctx.navigateTo(`#/search/${encodeURIComponent(q)}`);
+    });
+
+    searchWrap.appendChild(searchInput);
+
+    const searchBtn = document.createElement("button");
+    searchBtn.type = "submit";
+    searchBtn.className = "btn btn-small";
+    searchBtn.textContent = "Suchen";
+    searchWrap.appendChild(searchBtn);
+
+    bar.appendChild(searchWrap);
+  }
+
+  renderThemeSwitcher(bar, { compact: true });
+  container.appendChild(bar);
+  return bar;
 }
 
 /**

@@ -1,7 +1,7 @@
 import { journalStore } from "../store/journal-store.js";
 import { getWeekKey, formatWeekLabel } from "../utils/dates.js";
 import { FIELD_LABELS, REFLECTION_FIELDS } from "../models/journal.js";
-import { renderAppHeader, showToast } from "./ui.js";
+import { renderAppHeader, renderAppToolbar, showToast } from "./ui.js";
 
 const AUTOSAVE_MS = 2000;
 
@@ -23,6 +23,8 @@ export function renderWeekEditor(container, weekKeyParam, ctx) {
     backHref: "#/",
     backLabel: "← Dashboard"
   });
+
+  renderAppToolbar(container, ctx);
 
   if (prev && (prev.goal1 || prev.goal2)) {
     const carry = document.createElement("aside");

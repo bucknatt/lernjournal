@@ -1,6 +1,6 @@
 import { journalStore } from "../store/journal-store.js";
 import { getWeekKey, formatWeekLabel } from "../utils/dates.js";
-import { renderAppHeader, renderSettingsPanel } from "./ui.js";
+import { renderAppHeader, renderAppToolbar, renderSettingsPanel } from "./ui.js";
 
 /** @type {(() => void) | null} */
 let dashboardUnsub = null;
@@ -29,6 +29,8 @@ export function renderDashboard(container, ctx) {
     title: "Lernjournal",
     subtitle: "Deine Lernreise — Wochenrückblick & Reflexion"
   });
+
+  renderAppToolbar(container, ctx);
 
   const hero = document.createElement("section");
   hero.className = "hero";
@@ -125,6 +127,8 @@ export function renderDashboard(container, ctx) {
 
   container.appendChild(grid);
 
+  renderDashboardSearchPreview(container, ctx);
+
   const journey = document.createElement("section");
   journey.className = "journey-section";
   journey.innerHTML = `<h2>Deine Journey</h2>`;
@@ -179,6 +183,42 @@ export function renderDashboard(container, ctx) {
       dashboardUnsub = null;
     }
   };
+}
+
+/**
+ * @param {HTMLElement} container
+ * @param {{ navigateTo: (hash: string) => void }} ctx
+ */
+function renderDashboardSearchPreview(container, ctx) {
+  const section = document.createElement("section");
+  section.className = "search-preview-section";
+  section.innerHTML = `<h2>Schnellsuche</h2>`;
+
+  const form = document.createElement("form");
+  form.className = "search-form card";
+  form.setAttribute("role", "search");
+
+  const input = document.createElement("input");
+  input.type = "search";
+  input.className = "search-input";
+  input.placeholder = "z. B. React, Pair Programming, Ziel…";
+  input.setAttribute("aria-label", "Alle Einträge durchsuchen");
+
+  const btn = document.createElement("button");
+  btn.type = "submit";
+  btn.className = "btn btn-primary";
+  btn.textContent = "Alle Einträge durchsuchen";
+
+  form.append(input, btn);
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const q = input.value.trim();
+    if (q.length < 2) return;
+    ctx.navigateTo(`#/search/${encodeURIComponent(q)}`);
+  });
+
+  section.appendChild(form);
+  container.appendChild(section);
 }
 
 function escapeHtml(s) {

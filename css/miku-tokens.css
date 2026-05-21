@@ -55,9 +55,14 @@
 
 body[data-miku-theme="MinimalMiku"] {
   --miku-accent: color-mix(in srgb, var(--palette-19601-3) 40%, var(--palette-pop-cyan));
+  --miku-deep-teal: var(--palette-19601-4);
   --miku-bg: #12151a;
   --miku-secondary-dark: color-mix(in srgb, var(--miku-plum-soft) 15%, #1f252c);
   --miku-glow: color-mix(in srgb, var(--palette-pop-cyan-hot) 35%, white);
+  --miku-text: var(--palette-19601-2);
+  --miku-pop: var(--miku-hot-pink);
+  --miku-accent-warm: var(--palette-pop-pink-soft);
+  --miku-border-subtle: color-mix(in srgb, var(--palette-19601-3) 28%, var(--palette-pop-violet));
   --miku-gradient-surface: linear-gradient(
     148deg,
     color-mix(in srgb, var(--palette-pop-cyan-hot) 13%, var(--miku-bg)) 0%,
@@ -65,6 +70,71 @@ body[data-miku-theme="MinimalMiku"] {
     color-mix(in srgb, var(--palette-pop-violet) 10%, var(--miku-bg)) 62%,
     color-mix(in srgb, var(--palette-19601-5) 10%, var(--miku-bg)) 88%,
     color-mix(in srgb, var(--palette-pop-sun) 6%, var(--miku-bg)) 100%
+  );
+}
+
+body[data-miku-theme="Concert"] {
+  --miku-accent: color-mix(in srgb, var(--palette-pop-cyan-hot) 72%, white);
+  --miku-deep-teal: color-mix(in srgb, var(--palette-pop-teal-deep) 55%, var(--palette-19601-4));
+  --miku-bg: #0f141c;
+  --miku-secondary-dark: #171f2e;
+  --miku-glow: #e8fff8;
+  --miku-text: #eef4fc;
+  --miku-pop: #ff62c6;
+  --miku-accent-warm: color-mix(in srgb, var(--palette-pop-pink-hot) 52%, white);
+  --miku-muted: color-mix(in srgb, var(--miku-text) 58%, var(--palette-pop-plum));
+  --miku-border-subtle: color-mix(in srgb, var(--palette-pop-violet) 38%, var(--palette-19601-1));
+  --miku-gradient-surface: linear-gradient(
+    158deg,
+    color-mix(in srgb, var(--palette-pop-cyan-hot) 22%, var(--miku-bg)) 0%,
+    color-mix(in srgb, var(--palette-pop-pink-soft) 6%, var(--miku-bg)) 28%,
+    var(--miku-bg) 48%,
+    color-mix(in srgb, var(--palette-pop-sun-hot) 7%, var(--miku-bg)) 72%,
+    color-mix(in srgb, var(--palette-pop-violet) 14%, var(--miku-bg)) 100%
+  );
+}
+
+body[data-miku-theme="NightNeon"] {
+  --miku-accent: color-mix(in srgb, var(--palette-pop-cyan-hot) 48%, var(--palette-pop-teal-deep));
+  --miku-deep-teal: #065a61;
+  --miku-bg: #0b0e14;
+  --miku-secondary-dark: color-mix(in srgb, var(--palette-pop-plum) 22%, #141a22);
+  --miku-glow: color-mix(in srgb, var(--palette-pop-cyan-hot) 65%, cyan);
+  --miku-text: #d6e6f8;
+  --miku-pop: color-mix(in srgb, var(--palette-pop-pink-hot) 72%, magenta);
+  --miku-accent-warm: var(--palette-pop-pink-soft);
+  --miku-muted: color-mix(in srgb, var(--miku-text) 45%, var(--palette-pop-plum));
+  --miku-border-subtle: color-mix(in srgb, var(--palette-pop-violet) 45%, black);
+  --miku-gradient-surface: radial-gradient(
+      120% 80% at 50% -20%,
+      color-mix(in srgb, var(--palette-pop-cyan-hot) 14%, transparent),
+      transparent 55%
+    ),
+    linear-gradient(
+      172deg,
+      var(--miku-bg) 0%,
+      color-mix(in srgb, var(--palette-pop-plum) 35%, var(--miku-bg)) 45%,
+      color-mix(in srgb, var(--palette-pop-pink-hot) 9%, var(--miku-bg)) 100%
+    );
+}
+
+body[data-miku-theme="SnowMiku"] {
+  --miku-accent: color-mix(in srgb, #d4fffb 58%, var(--palette-pop-teal-deep));
+  --miku-deep-teal: color-mix(in srgb, var(--palette-pop-teal-deep) 30%, white);
+  --miku-bg: #1e2830;
+  --miku-secondary-dark: #2a3540;
+  --miku-glow: color-mix(in srgb, var(--palette-pop-cyan) 45%, white);
+  --miku-text: color-mix(in srgb, var(--palette-pop-sky) 8%, white);
+  --miku-pop: color-mix(in srgb, var(--palette-pop-pink-soft) 65%, pink);
+  --miku-accent-warm: color-mix(in srgb, var(--palette-pop-sun) 22%, white);
+  --miku-muted: color-mix(in srgb, var(--miku-text) 52%, var(--palette-pop-navy));
+  --miku-border-subtle: color-mix(in srgb, var(--palette-19601-2) 32%, var(--palette-pop-violet));
+  --miku-gradient-surface: linear-gradient(
+    158deg,
+    color-mix(in srgb, var(--palette-pop-sky) 12%, var(--miku-bg)) 0%,
+    var(--miku-bg) 40%,
+    color-mix(in srgb, white 10%, color-mix(in srgb, var(--palette-pop-pink-soft) 12%, var(--miku-bg))) 70%,
+    color-mix(in srgb, var(--palette-pop-sun) 8%, var(--miku-bg)) 100%
   );
 }
 

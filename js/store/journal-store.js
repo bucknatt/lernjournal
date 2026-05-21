@@ -13,8 +13,9 @@ const GITHUB_TOKEN_KEY = "lernjournal-github-token";
 
 /** @type {import('../models/journal.js').JournalFile} */
 let journal = { version: 1, entries: [] };
+/** Last known state matching data/journal.json (or after explicit sync). */
 /** @type {string | null} */
-let loadedSnapshot = null;
+let syncedSnapshot = null;
 /** @type {Set<(state: object) => void>} */
 const listeners = new Set();
 
@@ -46,13 +47,14 @@ export const journalStore = {
     const fromRepo = await fetchJournalFromRepo();
     const draft = loadDraftFromLocalStorage();
 
-    if (draft && snapshot(draft) !== snapshot(fromRepo)) {
+    syncedSnapshot = snapshot(fromRepo);
+
+    if (draft && snapshot(draft) !== syncedSnapshot) {
       journal = draft;
     } else {
       journal = fromRepo;
     }
 
-    loadedSnapshot = snapshot(journal);
     persistDraftToLocalStorage();
     notify();
   },
@@ -60,7 +62,7 @@ export const journalStore = {
   getState() {
     return {
       journal: { ...journal, entries: [...journal.entries] },
-      isDirty: loadedSnapshot !== null && snapshot(journal) !== loadedSnapshot,
+      isDirty: syncedSnapshot !== null && snapshot(journal) !== syncedSnapshot,
       currentWeekKey: getWeekKey()
     };
   },
@@ -155,13 +157,13 @@ export const journalStore = {
 
   replaceJournal(newJournal) {
     journal = normalizeJournalFile(newJournal);
-    loadedSnapshot = snapshot(journal);
+    syncedSnapshot = snapshot(journal);
     persistDraftToLocalStorage();
     notify();
   },
 
   markSyncedFromRepo() {
-    loadedSnapshot = snapshot(journal);
+    syncedSnapshot = snapshot(journal);
     persistDraftToLocalStorage();
     notify();
   },

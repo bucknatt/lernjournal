@@ -1,8 +1,10 @@
 import { initRouter } from "./router.js";
 import { journalStore } from "./store/journal-store.js";
+import { initTheme } from "./utils/theme.js";
 
 async function bootstrap() {
   try {
+    initTheme();
     await journalStore.init();
     initRouter();
   } catch (err) {

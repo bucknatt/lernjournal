@@ -1,7 +1,7 @@
 import { journalStore } from "../store/journal-store.js";
 import { formatWeekLabel } from "../utils/dates.js";
 import { FIELD_LABELS, REFLECTION_FIELDS } from "../models/journal.js";
-import { renderAppHeader } from "./ui.js";
+import { renderAppHeader, renderAppToolbar } from "./ui.js";
 
 /**
  * @param {HTMLElement} container
@@ -30,6 +30,8 @@ export function renderWeekRead(container, weekKey, ctx) {
     backHref: "#/",
     backLabel: "← Dashboard"
   });
+
+  renderAppToolbar(container, ctx);
 
   const actions = document.createElement("div");
   actions.className = "btn-group";

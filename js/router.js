@@ -1,6 +1,7 @@
 import { renderDashboard } from "./views/dashboard.js";
 import { renderWeekEditor } from "./views/week-editor.js";
 import { renderWeekRead } from "./views/week-read.js";
+import { renderSearch } from "./views/search.js";
 
 let currentCleanup = null;
 
@@ -19,6 +20,11 @@ function parseRoute() {
 
   if (parts[0] === "new") {
     return { name: "week-edit", weekKey: parts[1] ? decodeURIComponent(parts[1]) : null };
+  }
+
+  if (parts[0] === "search") {
+    const query = parts.length > 1 ? decodeURIComponent(parts.slice(1).join("/")) : "";
+    return { name: "search", query };
   }
 
   return { name: "dashboard" };
@@ -47,6 +53,9 @@ function renderCurrentRoute() {
       break;
     case "week-read":
       currentCleanup = renderWeekRead(app, route.weekKey, { navigateTo });
+      break;
+    case "search":
+      currentCleanup = renderSearch(app, route.query, { navigateTo });
       break;
     case "dashboard":
     default:
