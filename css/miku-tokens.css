@@ -1,0 +1,79 @@
+/* Miku Hybrid theme — ported from mitsu-plugin (MinimalMiku) */
+
+:root {
+  --palette-19601-1: #373b3e;
+  --palette-19601-2: #bec8d1;
+  --palette-19601-3: #86cecb;
+  --palette-19601-4: #137a7f;
+  --palette-19601-5: #e12885;
+
+  --palette-pop-cyan: #40e0d0;
+  --palette-pop-cyan-hot: #00e5ff;
+  --palette-pop-teal-deep: #00afb9;
+  --palette-pop-pink-hot: #ff007f;
+  --palette-pop-pink-soft: #ff66cc;
+  --palette-pop-pink-muted: #f15bb5;
+  --palette-pop-sun: #fee440;
+  --palette-pop-sun-hot: #ffff00;
+  --palette-pop-violet: #9b5de5;
+  --palette-pop-plum: #540d6e;
+  --palette-pop-sky: #00bbf9;
+  --palette-pop-navy: #0081a7;
+
+  --miku-plum-soft: color-mix(in srgb, var(--palette-pop-plum) 25%, var(--palette-19601-1));
+  --miku-hot-pink: color-mix(in srgb, var(--palette-pop-pink-hot) 35%, var(--palette-19601-5));
+
+  --miku-accent: var(--palette-pop-cyan);
+  --miku-deep-teal: var(--palette-19601-4);
+  --miku-bg: #12151a;
+  --miku-secondary-dark: color-mix(in srgb, var(--miku-plum-soft) 18%, #1e2329);
+  --miku-glow: color-mix(in srgb, var(--palette-pop-cyan-hot) 42%, white);
+  --miku-text: var(--palette-19601-2);
+  --miku-pop: var(--miku-hot-pink);
+  --miku-accent-warm: var(--palette-pop-pink-soft);
+  --miku-muted: color-mix(in srgb, var(--palette-19601-2) 55%, var(--palette-19601-1));
+  --miku-border-subtle: color-mix(in srgb, var(--palette-pop-violet) 22%, var(--palette-19601-1));
+
+  --miku-gradient-surface: linear-gradient(
+    148deg,
+    color-mix(in srgb, var(--palette-pop-cyan-hot) 11%, var(--miku-bg)) 0%,
+    var(--miku-bg) 32%,
+    color-mix(in srgb, var(--palette-pop-violet) 9%, var(--miku-bg)) 58%,
+    color-mix(in srgb, var(--palette-pop-pink-muted) 7%, var(--miku-bg)) 82%,
+    color-mix(in srgb, var(--palette-pop-sun) 5%, var(--miku-bg)) 100%
+  );
+
+  --font-body: "Nunito", system-ui, sans-serif;
+  --font-display: "Quicksand", "Nunito", sans-serif;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.85rem;
+  --radius-lg: 1.25rem;
+  --radius-xl: 1.75rem;
+  --shadow-glow: 0 0 1rem color-mix(in srgb, var(--miku-glow) 35%, transparent),
+    0 0 2rem color-mix(in srgb, var(--miku-pop) 18%, transparent);
+}
+
+body[data-miku-theme="MinimalMiku"] {
+  --miku-accent: color-mix(in srgb, var(--palette-19601-3) 40%, var(--palette-pop-cyan));
+  --miku-bg: #12151a;
+  --miku-secondary-dark: color-mix(in srgb, var(--miku-plum-soft) 15%, #1f252c);
+  --miku-glow: color-mix(in srgb, var(--palette-pop-cyan-hot) 35%, white);
+  --miku-gradient-surface: linear-gradient(
+    148deg,
+    color-mix(in srgb, var(--palette-pop-cyan-hot) 13%, var(--miku-bg)) 0%,
+    var(--miku-bg) 38%,
+    color-mix(in srgb, var(--palette-pop-violet) 10%, var(--miku-bg)) 62%,
+    color-mix(in srgb, var(--palette-19601-5) 10%, var(--miku-bg)) 88%,
+    color-mix(in srgb, var(--palette-pop-sun) 6%, var(--miku-bg)) 100%
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

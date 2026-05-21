@@ -1,0 +1,190 @@
+import { journalStore } from "../store/journal-store.js";
+import { getWeekKey, formatWeekLabel } from "../utils/dates.js";
+import { renderAppHeader, renderSettingsPanel } from "./ui.js";
+
+/** @type {(() => void) | null} */
+let dashboardUnsub = null;
+
+/**
+ * @param {HTMLElement} container
+ * @param {{ navigateTo: (hash: string) => void }} ctx
+ */
+export function renderDashboard(container, ctx) {
+  if (dashboardUnsub) {
+    dashboardUnsub();
+    dashboardUnsub = null;
+  }
+
+  container.innerHTML = "";
+
+  const state = journalStore.getState();
+  const currentWeek = state.currentWeekKey;
+  const currentEntry = journalStore.getEntry(currentWeek);
+  const prevEntry = journalStore.getPreviousEntry(currentWeek);
+  const timeline = journalStore.getTimelineWeekKeys();
+  const streak = journalStore.getStreak();
+  const completed = journalStore.getCompletedCount();
+
+  renderAppHeader(container, {
+    title: "Lernjournal",
+    subtitle: "Deine Lernreise — Wochenrückblick & Reflexion"
+  });
+
+  const hero = document.createElement("section");
+  hero.className = "hero";
+  hero.innerHTML = `
+    <p class="page-subtitle" style="margin:0">Aktuelle Woche</p>
+    <p style="font-family:var(--font-display);font-size:1.2rem;font-weight:700;margin:0.25rem 0 0">
+      ${formatWeekLabel(currentWeek)}
+    </p>
+  `;
+
+  const meta = document.createElement("div");
+  meta.className = "hero-meta";
+
+  const cta = document.createElement("button");
+  cta.type = "button";
+  cta.className = "btn btn-primary";
+  if (currentEntry) {
+    cta.textContent = currentEntry.status === "complete" ? "Eintrag ansehen" : "Weiter bearbeiten";
+    cta.onclick = () => {
+      if (currentEntry.status === "complete") {
+        ctx.navigateTo(`#/week/${currentWeek}/read`);
+      } else {
+        ctx.navigateTo(`#/week/${currentWeek}/edit`);
+      }
+    };
+  } else {
+    cta.textContent = "Diese Woche schreiben";
+    cta.onclick = () => ctx.navigateTo(`#/week/${currentWeek}/edit`);
+  }
+  meta.appendChild(cta);
+
+  if (state.isDirty) {
+    const b = document.createElement("span");
+    b.className = "badge badge-warn";
+    b.textContent = "Lokal geändert";
+    meta.appendChild(b);
+  }
+
+  hero.appendChild(meta);
+  container.appendChild(hero);
+
+  const grid = document.createElement("div");
+  grid.className = "card-grid";
+
+  const streakCard = document.createElement("article");
+  streakCard.className = "card";
+  streakCard.innerHTML = `
+    <h3>Streak</h3>
+    <p><strong>${streak}</strong> Woche(n) in Folge abgeschlossen · <strong>${completed}</strong> gesamt</p>
+  `;
+  grid.appendChild(streakCard);
+
+  if (prevEntry) {
+    const goodCard = document.createElement("article");
+    goodCard.className = "card card-highlight";
+    const goodText = prevEntry.wentWell.trim() || "—";
+    goodCard.innerHTML = `<h3>Letzte Woche · ging gut</h3><p>${escapeHtml(goodText.slice(0, 120))}${goodText.length > 120 ? "…" : ""}</p>`;
+    grid.appendChild(goodCard);
+
+    const badCard = document.createElement("article");
+    badCard.className = "card";
+    const badText = prevEntry.wentPoorly.trim() || "—";
+    badCard.innerHTML = `<h3>Letzte Woche · nicht so gut</h3><p>${escapeHtml(badText.slice(0, 120))}${badText.length > 120 ? "…" : ""}</p>`;
+    grid.appendChild(badCard);
+
+    const goalsCard = document.createElement("article");
+    goalsCard.className = "card";
+    goalsCard.innerHTML = `<h3>Ziele von letzter Woche</h3>`;
+    const chips = document.createElement("div");
+    chips.className = "goal-chips";
+    if (prevEntry.goal1) {
+      const c1 = document.createElement("div");
+      c1.className = "goal-chip";
+      c1.textContent = prevEntry.goal1;
+      chips.appendChild(c1);
+    }
+    if (prevEntry.goal2) {
+      const c2 = document.createElement("div");
+      c2.className = "goal-chip";
+      c2.textContent = prevEntry.goal2;
+      chips.appendChild(c2);
+    }
+    if (!prevEntry.goal1 && !prevEntry.goal2) {
+      chips.innerHTML = `<div class="goal-chip muted">Keine Ziele gesetzt</div>`;
+    }
+    goalsCard.appendChild(chips);
+    grid.appendChild(goalsCard);
+  } else {
+    const emptyCard = document.createElement("article");
+    emptyCard.className = "card";
+    emptyCard.innerHTML = `<h3>Willkommen</h3><p>Starte deinen ersten Wochenrückblick — die Journey beginnt hier.</p>`;
+    grid.appendChild(emptyCard);
+  }
+
+  container.appendChild(grid);
+
+  const journey = document.createElement("section");
+  journey.className = "journey-section";
+  journey.innerHTML = `<h2>Deine Journey</h2>`;
+
+  const track = document.createElement("div");
+  track.className = "journey-track";
+  track.setAttribute("role", "list");
+
+  for (const weekKey of timeline) {
+    const entry = journalStore.getEntry(weekKey);
+    let status = "empty";
+    if (entry) status = entry.status === "complete" ? "complete" : "draft";
+    const isCurrent = weekKey === currentWeek;
+
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = `journey-node journey-node--${status}${isCurrent ? " journey-node--current" : ""}`;
+    btn.setAttribute("role", "listitem");
+    btn.title = formatWeekLabel(weekKey);
+
+    const icon = entry?.status === "complete" ? "✓" : entry ? "◐" : "○";
+    btn.innerHTML = `
+      <div class="journey-node-dot">${icon}</div>
+      <div class="journey-node-label">${weekKey.split("-W")[1]}</div>
+    `;
+
+    btn.onclick = () => {
+      if (entry?.status === "complete") {
+        ctx.navigateTo(`#/week/${weekKey}/read`);
+      } else if (entry) {
+        ctx.navigateTo(`#/week/${weekKey}/edit`);
+      } else {
+        ctx.navigateTo(`#/week/${weekKey}/edit`);
+      }
+    };
+
+    track.appendChild(btn);
+  }
+
+  journey.appendChild(track);
+  container.appendChild(journey);
+
+  renderSettingsPanel(container, ctx);
+
+  dashboardUnsub = journalStore.subscribe(() => {
+    renderDashboard(container, ctx);
+  });
+
+  return () => {
+    if (dashboardUnsub) {
+      dashboardUnsub();
+      dashboardUnsub = null;
+    }
+  };
+}
+
+function escapeHtml(s) {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
