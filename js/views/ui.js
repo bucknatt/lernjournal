@@ -214,7 +214,7 @@ export function renderSettingsPanel(parent, ctx) {
   repoLabel.textContent = "Repository (owner/name)";
   const repoInput = document.createElement("input");
   repoInput.type = "text";
-  repoInput.placeholder = "mein-user/lernjournal";
+  repoInput.placeholder = "bucknatt/lernjournal";
   repoInput.value = cfg.repo;
 
   const tokenLabel = document.createElement("label");
