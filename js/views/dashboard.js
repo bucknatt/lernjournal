@@ -1,6 +1,7 @@
 import { journalStore } from "../store/journal-store.js";
 import { getWeekKey, formatWeekLabel } from "../utils/dates.js";
 import { renderAppHeader, renderAppToolbar, renderSettingsPanel } from "./ui.js";
+import { decorateDisplayTitle, decorateCardTitle } from "../utils/font-decor.js";
 
 /** @type {(() => void) | null} */
 let dashboardUnsub = null;
@@ -36,9 +37,7 @@ export function renderDashboard(container, ctx) {
   hero.className = "hero";
   hero.innerHTML = `
     <p class="page-subtitle" style="margin:0">Aktuelle Woche</p>
-    <p style="font-family:var(--font-display);font-size:1.2rem;font-weight:700;margin:0.25rem 0 0">
-      ${formatWeekLabel(currentWeek)}
-    </p>
+    <p class="week-range-label">${formatWeekLabel(currentWeek)}</p>
   `;
 
   const meta = document.createElement("div");
@@ -78,7 +77,7 @@ export function renderDashboard(container, ctx) {
   const streakCard = document.createElement("article");
   streakCard.className = "card";
   streakCard.innerHTML = `
-    <h3>Streak</h3>
+    <h3 class="display-decor">${escapeHtml(decorateCardTitle("Streak"))}</h3>
     <p><strong>${streak}</strong> Woche(n) in Folge abgeschlossen · <strong>${completed}</strong> gesamt</p>
   `;
   grid.appendChild(streakCard);
@@ -87,18 +86,18 @@ export function renderDashboard(container, ctx) {
     const goodCard = document.createElement("article");
     goodCard.className = "card card-highlight";
     const goodText = prevEntry.wentWell.trim() || "—";
-    goodCard.innerHTML = `<h3>Letzte Woche · ging gut</h3><p>${escapeHtml(goodText.slice(0, 120))}${goodText.length > 120 ? "…" : ""}</p>`;
+    goodCard.innerHTML = `<h3 class="display-decor">${escapeHtml(decorateCardTitle("Letzte Woche · ging gut"))}</h3><p>${escapeHtml(goodText.slice(0, 120))}${goodText.length > 120 ? "…" : ""}</p>`;
     grid.appendChild(goodCard);
 
     const badCard = document.createElement("article");
     badCard.className = "card";
     const badText = prevEntry.wentPoorly.trim() || "—";
-    badCard.innerHTML = `<h3>Letzte Woche · nicht so gut</h3><p>${escapeHtml(badText.slice(0, 120))}${badText.length > 120 ? "…" : ""}</p>`;
+    badCard.innerHTML = `<h3 class="display-decor">${escapeHtml(decorateCardTitle("Letzte Woche · nicht so gut"))}</h3><p>${escapeHtml(badText.slice(0, 120))}${badText.length > 120 ? "…" : ""}</p>`;
     grid.appendChild(badCard);
 
     const goalsCard = document.createElement("article");
     goalsCard.className = "card";
-    goalsCard.innerHTML = `<h3>Ziele von letzter Woche</h3>`;
+    goalsCard.innerHTML = `<h3 class="display-decor">${escapeHtml(decorateCardTitle("Ziele von letzter Woche"))}</h3>`;
     const chips = document.createElement("div");
     chips.className = "goal-chips";
     if (prevEntry.goal1) {
@@ -121,7 +120,7 @@ export function renderDashboard(container, ctx) {
   } else {
     const emptyCard = document.createElement("article");
     emptyCard.className = "card";
-    emptyCard.innerHTML = `<h3>Willkommen</h3><p>Starte deinen ersten Wochenrückblick — die Journey beginnt hier.</p>`;
+    emptyCard.innerHTML = `<h3 class="display-decor">${escapeHtml(decorateCardTitle("Willkommen"))}</h3><p>Starte deinen ersten Wochenrückblick — die Journey beginnt hier.</p>`;
     grid.appendChild(emptyCard);
   }
 
@@ -131,7 +130,10 @@ export function renderDashboard(container, ctx) {
 
   const journey = document.createElement("section");
   journey.className = "journey-section";
-  journey.innerHTML = `<h2>Deine Journey</h2>`;
+  const journeyTitle = document.createElement("h2");
+  journeyTitle.className = "display-decor";
+  journeyTitle.textContent = decorateDisplayTitle("Deine Journey");
+  journey.appendChild(journeyTitle);
 
   const track = document.createElement("div");
   track.className = "journey-track";
@@ -192,7 +194,10 @@ export function renderDashboard(container, ctx) {
 function renderDashboardSearchPreview(container, ctx) {
   const section = document.createElement("section");
   section.className = "search-preview-section";
-  section.innerHTML = `<h2>Schnellsuche</h2>`;
+  const searchTitle = document.createElement("h2");
+  searchTitle.className = "display-decor";
+  searchTitle.textContent = decorateDisplayTitle("Schnellsuche");
+  section.appendChild(searchTitle);
 
   const form = document.createElement("form");
   form.className = "search-form card";

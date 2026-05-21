@@ -1,5 +1,6 @@
 import { journalStore } from "../store/journal-store.js";
 import { renderThemeSwitcher } from "../utils/theme.js";
+import { decorateDisplayTitle, decorateCardTitle } from "../utils/font-decor.js";
 
 /**
  * @param {string} message
@@ -34,8 +35,8 @@ export function renderAppHeader(container, { title, subtitle, backHref, backLabe
 
   const text = document.createElement("div");
   const h1 = document.createElement("h1");
-  h1.className = "page-title";
-  h1.textContent = title;
+  h1.className = "page-title display-decor";
+  h1.textContent = decorateDisplayTitle(title);
   text.appendChild(h1);
 
   if (subtitle) {
@@ -106,7 +107,8 @@ export function renderSettingsPanel(parent, ctx) {
   const panel = document.createElement("section");
   panel.className = "settings-panel";
   const title = document.createElement("h3");
-  title.textContent = "Sync & Backup";
+  title.className = "display-decor";
+  title.textContent = decorateCardTitle("Sync & Backup");
   panel.appendChild(title);
 
   if (journalStore.getState().isDirty) {

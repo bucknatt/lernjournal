@@ -12,6 +12,7 @@ body {
 
 body {
   font-family: var(--font-body);
+  font-size: var(--font-size-body);
   color: var(--miku-text);
   background: var(--miku-gradient-surface);
   background-attachment: fixed;
@@ -33,11 +34,22 @@ body {
   margin-bottom: 1.5rem;
 }
 
+.page-header > div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
 .page-title {
   font-family: var(--font-display);
-  font-size: clamp(1.75rem, 4vw, 2.35rem);
-  font-weight: 700;
+  font-size: var(--font-size-title-page);
+  font-weight: 400;
+  line-height: 1.45;
   margin: 0;
+  padding-bottom: 0.2em;
+  overflow: visible;
   background: linear-gradient(105deg, var(--miku-glow), var(--miku-accent), var(--miku-pop));
   -webkit-background-clip: text;
   background-clip: text;
@@ -45,9 +57,20 @@ body {
 }
 
 .page-subtitle {
-  margin: 0.35rem 0 0;
+  margin: 0;
+  padding-top: 0.15rem;
   color: var(--miku-muted);
   font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+/* Week range (KW · dates) — readable body font, not display font */
+.week-range-label {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--miku-text);
+  margin: 0.25rem 0 0;
 }
 
 .nav-back {

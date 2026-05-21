@@ -1,5 +1,14 @@
 /* Miku Hybrid theme — ported from mitsu-plugin (MinimalMiku) */
 
+/* Too Freakin Cute Demo — titles (Misti's Fonts / 1001fonts, personal use) */
+@font-face {
+  font-family: "Too Freakin Cute Demo";
+  src: url("../fonts/TooFreakinCuteDemo.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --palette-19601-1: #373b3e;
   --palette-19601-2: #bec8d1;
@@ -44,7 +53,14 @@
   );
 
   --font-body: "Nunito", system-ui, sans-serif;
-  --font-display: "Quicksand", "Nunito", sans-serif;
+  --font-display: "Too Freakin Cute Demo", "Nunito", system-ui, sans-serif;
+
+  /* Body ~1rem; display titles need larger sizes to read clearly */
+  --font-size-body: 1rem;
+  --font-size-body-sm: 0.92rem;
+  --font-size-title-page: clamp(2.35rem, 6vw, 3.25rem);
+  --font-size-title-section: 1.85rem;
+  --font-size-title-card: 1.55rem;
   --radius-sm: 0.5rem;
   --radius-md: 0.85rem;
   --radius-lg: 1.25rem;
