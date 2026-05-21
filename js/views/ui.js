@@ -243,7 +243,7 @@ export function renderSettingsPanel(parent, ctx) {
   help.style.fontSize = "0.82rem";
   help.style.marginTop = "0.75rem";
   help.innerHTML =
-    "<strong>Git-Workflow:</strong> <code>git pull</code> → bearbeiten → Export oder „Nach GitHub speichern“ → <code>git push</code>. Privates Repo empfohlen.";
+    "<strong>Git-Workflow:</strong> <code>git pull</code> → bearbeiten → Export oder „Nach GitHub speichern“ → <code>git push</code>.";
   details.appendChild(help);
   panel.appendChild(details);
 
