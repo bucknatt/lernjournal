@@ -1,71 +1,66 @@
 # Lernjournal
 
-Wöchentliches Lernjournal für die Lehre — Reflexion, Ziele und eine Journey-Map-Oberfläche im Miku-Hybrid-Theme.
+Weekly learning journal for my Stagestelle including self-reflection, goals, and a journey-map like UI. But that's not enough. Everything is styled in my favourite futuristc Hatsune Mikue theme!
 
-## Starten (lokal)
+## Run locally
 
 ```bash
 npm run dev
-# oder: python3 -m http.server 5173
+# or: python3 -m http.server 8765
 ```
 
-Öffne [http://localhost:5173](http://localhost:5173). **Nicht** per `file://` öffnen (`fetch` für `data/journal.json` schlägt sonst fehl).
+Open [http://localhost:8765](http://localhost:8765). Do not open via `file://` or **fetch** for `data/journal.json` will fail.
 
-Falls `npm run dev:npx` (mit `serve`) gewünscht ist, wird dafür ein Zugriff auf registry.npmjs.org benötigt.
+**Port already in use?** An old server may still be running. Either stop it:
 
-## Wochenrückblick-Felder
-
-Jeder Eintrag pro Kalenderwoche (ISO) enthält:
-
-- Datum
-- Was habe ich diese Woche gemacht/umgesetzt?
-- Welche Methoden habe ich verwendet?
-- Was habe ich dabei gelernt (fachlich, persönlich)?
-- Was ging gut? / Was ging nicht so gut?
-- Wer oder was hat mir weitergeholfen?
-- Was kann ich verbessern?
-- 2 Ziele für nächste Woche
-
-## Daten
-
-- **Quelle:** [`data/journal.json`](data/journal.json) im Repository (versioniert mit Git).
-- **Entwurf:** Browser-`localStorage` (Autosave beim Tippen).
-
-## Mehrere Geräte (Sync)
-
-1. **Vor dem Schreiben:** `git pull` (oder in der App „Von GitHub laden“).
-2. App bearbeiten (lokal zwischengespeichert).
-3. **Nach dem Schreiben:**
-   - **Git:** „JSON exportieren“ → `data/journal.json` ersetzen → `git add data/journal.json && git commit -m "journal Wxx" && git push`
-   - **GitHub API:** Repo + PAT in Einstellungen → „Nach GitHub speichern“
-
-### GitHub API (optional)
-
-1. Fine-grained Personal Access Token mit **Contents: Read and write** nur für dieses Repo.
-2. In der App unter „GitHub API“: `owner/repo` und Token eintragen.
-3. „Von GitHub laden“ / „Nach GitHub speichern“ nutzen.
-
-Bei Konflikten (409): zuerst laden, dann erneut speichern.
-
-## Privatsphäre
-
-Nutze ein **privates** GitHub-Repository — der Journal-Inhalt liegt in `journal.json` und in der Git-Historie.
-
-## GitHub Pages (optional)
-
-Statische Dateien (`index.html`, `css/`, `js/`, `data/journal.json`) können auf GitHub Pages deployed werden. Schreiben erfolgt weiterhin per Export/Git oder GitHub API.
-
-## Struktur
-
-```
-index.html
-css/          # Miku-Theme
-js/
-  models/     # Datenmodell
-  store/      # Journal-State
-  api/        # Laden, GitHub-Sync
-  views/      # Dashboard, Editor, Lesen
-data/journal.json
+```bash
+fuser -k 8765/tcp    # or 5173/tcp
+# alternatively:
+kill $(lsof -t -i:8765)
 ```
 
-Später möglich: Angular-Port der Views bei gleichem JSON-Schema.
+…or use another port: `python3 -m http.server 9000` → http://localhost:9000
+
+If you prefer: `npm run dev:5173` uses port 5173 explicitly.
+
+## Weekly reflection data fields
+
+Each entry covers one calendar week and includes:
+
+- Date
+- What did I do/implement this week?
+- Which methods did I use?
+- What did I learn (technical, personal)?
+- What went well? / What did not go so well?
+- Who or what helped me?
+- What can I improve?
+- 2 goals for next week
+
+## Data
+
+- **Source of truth:** [`data/journal.json`](data/journal.json) in the repository (versioned with Git).
+- **Draft cache:** browser `localStorage` (autosave while typing).
+
+## How to sync across multiple devices
+
+1. **Before writing:** `git pull` (or **Load from GitHub** in the app).
+2. Edit in the app (cached locally).
+3. **After writing:**
+   - **Git:** **Export JSON** → replace `data/journal.json` → `git add data/journal.json && git commit -m "journal W20" && git push`
+   - **GitHub API:** configure repo + PAT in settings → **Save to GitHub**
+
+### Optionally use GitHub API
+
+1. Create a fine-grained Personal Access Token with **Contents: Read and write** for this repo only.
+2. In the app under **GitHub API**: enter `owner/repo` and the token.
+3. Use **Load from GitHub** / **Save to GitHub** in the UI.
+
+On conflicts (409): load first, then save again.
+
+## Privacy
+
+Use a **private** GitHub repository. Journal content lives in `journal.json` and in Git history.
+
+### Optionally use GitHub Pages
+
+Deploy static files (`index.html`, `css/`, `js/`, `data/journal.json`) via GitHub Pages. Writes still go through export/Git or the GitHub API.

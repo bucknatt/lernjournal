@@ -4,8 +4,9 @@
   "private": true,
   "description": "Weekly apprenticeship reflection journal with Miku-themed journey map UI",
   "scripts": {
-    "dev": "python3 -m http.server 5173",
-    "dev:npx": "npx --yes serve . -p 5173",
+    "dev": "python3 -m http.server 8765",
+    "dev:5173": "python3 -m http.server 5173",
+    "dev:npx": "npx --yes serve . -p 8765",
     "start": "npm run dev"
   }
 }
