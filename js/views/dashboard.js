@@ -1,6 +1,6 @@
 import { journalStore } from "../store/journal-store.js";
 import { getWeekKey, formatWeekLabel } from "../utils/dates.js";
-import { renderAppHeader, renderAppToolbar, renderSettingsPanel } from "./ui.js";
+import { renderAppHeader, renderAppToolbar, renderSettingsPanel, renderConflictBanner } from "./ui.js";
 import { decorateDisplayTitle, decorateCardTitle } from "../utils/font-decor.js";
 
 /** @type {(() => void) | null} */
@@ -32,6 +32,7 @@ export function renderDashboard(container, ctx) {
   });
 
   renderAppToolbar(container, ctx);
+  renderConflictBanner(container);
 
   const hero = document.createElement("section");
   hero.className = "hero";
@@ -81,6 +82,21 @@ export function renderDashboard(container, ctx) {
     <p><strong>${streak}</strong> Woche(n) in Folge abgeschlossen · <strong>${completed}</strong> gesamt</p>
   `;
   grid.appendChild(streakCard);
+
+  if (currentEntry) {
+    const weekCard = document.createElement("article");
+    weekCard.className = "card card-highlight";
+    const goodText = currentEntry.wentWell.trim() || "—";
+    const badText = currentEntry.wentPoorly.trim() || "—";
+    const statusLabel = currentEntry.status === "complete" ? "Abgeschlossen" : "Entwurf";
+    weekCard.innerHTML = `
+      <h3 class="display-decor">${escapeHtml(decorateCardTitle("Diese Woche"))}</h3>
+      <p class="muted" style="margin:0 0 0.5rem;font-size:0.85rem">${escapeHtml(statusLabel)} · ${escapeHtml(formatWeekLabel(currentWeek))}</p>
+      <p><strong>Ging gut:</strong> ${escapeHtml(goodText.slice(0, 100))}${goodText.length > 100 ? "…" : ""}</p>
+      <p style="margin-top:0.5rem"><strong>Nicht so gut:</strong> ${escapeHtml(badText.slice(0, 100))}${badText.length > 100 ? "…" : ""}</p>
+    `;
+    grid.appendChild(weekCard);
+  }
 
   if (prevEntry) {
     const goodCard = document.createElement("article");

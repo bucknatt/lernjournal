@@ -95,8 +95,66 @@ export function renderAppToolbar(container, ctx, opts = {}) {
   }
 
   renderThemeSwitcher(bar, { compact: true });
+
+  const state = journalStore.getState();
+  const source = document.createElement("span");
+  source.className = `data-source-badge data-source-badge--${state.dataSource}`;
+  source.textContent =
+    state.dataSource === "file" ? "Quelle: journal.json" : "Quelle: lokaler Entwurf";
+  bar.appendChild(source);
+
   container.appendChild(bar);
   return bar;
+}
+
+/**
+ * Banner when journal.json and localStorage draft differ.
+ * @param {HTMLElement} container
+ */
+export function renderConflictBanner(container) {
+  const existing = container.querySelector(".sync-conflict-banner");
+  if (existing) existing.remove();
+
+  if (!journalStore.getState().hasConflict) return null;
+
+  const banner = document.createElement("section");
+  banner.className = "sync-conflict-banner card";
+  banner.setAttribute("role", "alert");
+
+  const title = document.createElement("h3");
+  title.textContent = "Datenquelle wählen";
+  banner.appendChild(title);
+
+  const text = document.createElement("p");
+  text.textContent =
+    "data/journal.json und der lokale Entwurf im Browser sind unterschiedlich. Standardmässig wird die Datei angezeigt.";
+  banner.appendChild(text);
+
+  const actions = document.createElement("div");
+  actions.className = "btn-group";
+
+  const keepFile = document.createElement("button");
+  keepFile.type = "button";
+  keepFile.className = "btn btn-primary btn-small";
+  keepFile.textContent = "Datei behalten";
+  keepFile.onclick = () => {
+    journalStore.dismissPendingConflict();
+    showToast("journal.json wird verwendet.");
+  };
+
+  const keepDraft = document.createElement("button");
+  keepDraft.type = "button";
+  keepDraft.className = "btn btn-small";
+  keepDraft.textContent = "Entwurf laden";
+  keepDraft.onclick = () => {
+    journalStore.applyPendingDraft();
+    showToast("Lokaler Entwurf geladen.");
+  };
+
+  actions.append(keepFile, keepDraft);
+  banner.appendChild(actions);
+  container.appendChild(banner);
+  return banner;
 }
 
 /**
@@ -151,10 +209,7 @@ export function renderSettingsPanel(parent, ctx) {
   reloadBtn.textContent = "Von Datei neu laden";
   reloadBtn.onclick = async () => {
     try {
-      const { fetchJournalFromRepo } = await import("../api/load-journal.js");
-      const data = await fetchJournalFromRepo();
-      journalStore.replaceJournal(data);
-      journalStore.markSyncedFromRepo();
+      await journalStore.reloadFromFile();
       showToast("Aus data/journal.json geladen.");
       ctx.navigateTo(location.hash || "#/");
     } catch (e) {

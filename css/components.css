@@ -371,6 +371,46 @@
   }
 }
 
+/* Sync conflict + data source */
+.sync-conflict-banner {
+  margin-bottom: 1rem;
+  border-color: color-mix(in srgb, var(--miku-pop) 45%, transparent);
+}
+
+.sync-conflict-banner h3 {
+  margin: 0 0 0.5rem;
+  font-family: var(--font-display);
+  font-size: var(--font-size-title-card);
+  font-weight: 400;
+  color: var(--miku-accent-warm);
+}
+
+.sync-conflict-banner p {
+  margin: 0 0 0.75rem;
+  font-size: var(--font-size-body-sm);
+  color: var(--miku-muted);
+}
+
+.data-source-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.data-source-badge--file {
+  color: var(--miku-week-range);
+  border: 1px solid color-mix(in srgb, var(--palette-pop-sun) 35%, transparent);
+  background: color-mix(in srgb, var(--palette-pop-sun) 12%, transparent);
+}
+
+.data-source-badge--draft {
+  color: var(--miku-glow);
+  border: 1px solid color-mix(in srgb, var(--miku-pop) 40%, transparent);
+  background: color-mix(in srgb, var(--miku-pop) 15%, transparent);
+}
+
 /* App toolbar: theme + search */
 .app-toolbar {
   display: flex;

@@ -7,15 +7,19 @@ import { fetchJournalFromRepo, downloadJournalJson, importJournalFromFile } from
 import { getWeekKey, getPreviousWeekKey, buildTimelineWeekKeys } from "../utils/dates.js";
 
 const DRAFT_STORAGE_KEY = "lernjournal-draft-v1";
+const UNSAVED_EDITS_KEY = "lernjournal-has-unsaved-edits";
 const GITHUB_SHA_KEY = "lernjournal-github-sha";
 const GITHUB_REPO_KEY = "lernjournal-github-repo";
 const GITHUB_TOKEN_KEY = "lernjournal-github-token";
 
 /** @type {import('../models/journal.js').JournalFile} */
 let journal = { version: 1, entries: [] };
-/** Last known state matching data/journal.json (or after explicit sync). */
 /** @type {string | null} */
 let syncedSnapshot = null;
+/** @type {'file' | 'draft'} */
+let dataSource = "file";
+/** @type {{ file: import('../models/journal.js').JournalFile, draft: import('../models/journal.js').JournalFile } | null} */
+let pendingConflict = null;
 /** @type {Set<(state: object) => void>} */
 const listeners = new Set();
 
@@ -42,20 +46,38 @@ function snapshot(data) {
   return JSON.stringify(data);
 }
 
+function setUnsavedFlag(active) {
+  if (active) {
+    localStorage.setItem(UNSAVED_EDITS_KEY, "true");
+  } else {
+    localStorage.removeItem(UNSAVED_EDITS_KEY);
+  }
+}
+
+function syncLocalCacheToJournal() {
+  persistDraftToLocalStorage();
+  setUnsavedFlag(false);
+}
+
 export const journalStore = {
   async init() {
     const fromRepo = await fetchJournalFromRepo();
     const draft = loadDraftFromLocalStorage();
 
     syncedSnapshot = snapshot(fromRepo);
+    journal = fromRepo;
+    dataSource = "file";
+    pendingConflict = null;
 
     if (draft && snapshot(draft) !== syncedSnapshot) {
-      journal = draft;
+      pendingConflict = {
+        file: fromRepo,
+        draft
+      };
     } else {
-      journal = fromRepo;
+      syncLocalCacheToJournal();
     }
 
-    persistDraftToLocalStorage();
     notify();
   },
 
@@ -63,6 +85,8 @@ export const journalStore = {
     return {
       journal: { ...journal, entries: [...journal.entries] },
       isDirty: syncedSnapshot !== null && snapshot(journal) !== syncedSnapshot,
+      hasConflict: pendingConflict !== null,
+      dataSource,
       currentWeekKey: getWeekKey()
     };
   },
@@ -91,10 +115,6 @@ export const journalStore = {
     return journal.entries.find((e) => e.weekKey === prevKey) ?? null;
   },
 
-  /**
-   * @param {string} weekKey
-   * @returns {import('../models/journal.js').WeeklyEntry}
-   */
   getOrCreateEntry(weekKey) {
     let entry = journal.entries.find((e) => e.weekKey === weekKey);
     if (!entry) {
@@ -105,9 +125,6 @@ export const journalStore = {
     return entry;
   },
 
-  /**
-   * @param {import('../models/journal.js').WeeklyEntry} entry
-   */
   upsertEntry(entry) {
     const normalized = normalizeEntry({ ...entry, updatedAt: new Date().toISOString() });
     if (!normalized) return;
@@ -151,6 +168,8 @@ export const journalStore = {
   },
 
   _touch() {
+    dataSource = "draft";
+    setUnsavedFlag(true);
     persistDraftToLocalStorage();
     notify();
   },
@@ -158,13 +177,42 @@ export const journalStore = {
   replaceJournal(newJournal) {
     journal = normalizeJournalFile(newJournal);
     syncedSnapshot = snapshot(journal);
-    persistDraftToLocalStorage();
+    pendingConflict = null;
+    dataSource = "file";
+    syncLocalCacheToJournal();
     notify();
   },
 
   markSyncedFromRepo() {
     syncedSnapshot = snapshot(journal);
+    pendingConflict = null;
+    dataSource = "file";
+    syncLocalCacheToJournal();
+    notify();
+  },
+
+  /** Load data/journal.json and dismiss conflict. */
+  async reloadFromFile() {
+    const fromRepo = await fetchJournalFromRepo();
+    journalStore.replaceJournal(fromRepo);
+  },
+
+  /** Keep browser draft from conflict dialog. */
+  applyPendingDraft() {
+    if (!pendingConflict) return;
+    journal = normalizeJournalFile(pendingConflict.draft);
+    pendingConflict = null;
+    dataSource = "draft";
+    setUnsavedFlag(true);
     persistDraftToLocalStorage();
+    notify();
+  },
+
+  /** Keep current file view and drop pending draft. */
+  dismissPendingConflict() {
+    if (!pendingConflict) return;
+    pendingConflict = null;
+    syncLocalCacheToJournal();
     notify();
   },
 
@@ -175,7 +223,12 @@ export const journalStore = {
   async importJson() {
     const data = await importJournalFromFile();
     journal = data;
-    journalStore._touch();
+    syncedSnapshot = snapshot(journal);
+    pendingConflict = null;
+    dataSource = "draft";
+    setUnsavedFlag(true);
+    persistDraftToLocalStorage();
+    notify();
   },
 
   getGithubConfig() {

@@ -53,8 +53,9 @@ There is **no backend server**. The app must be served over HTTP (`npm run dev`)
 
 1. `fetchJournalFromRepo()` loads `data/journal.json`.
 2. `syncedSnapshot` is set to that file’s JSON string (baseline for “dirty” detection).
-3. If `localStorage` draft differs from the file, the **draft** becomes the working copy.
-4. Working copy is written back to `localStorage` on every change.
+3. The in-memory journal **always starts from the file** (file-first).
+4. If `localStorage` draft differs from the file, a **conflict banner** appears; the user chooses **Datei behalten** or **Entwurf laden**.
+5. `localStorage` is updated only after user edits (`_touch`) or when resolving sync (reload, GitHub save, dismiss conflict).
 
 ### Dirty state (`isDirty`)
 
@@ -71,7 +72,7 @@ Clearing dirty state:
 |--------|----------------|
 | Typing in editor | `upsertEntry` → `_touch` → `localStorage` draft |
 | Export JSON | Downloads `journal.json`; user commits to git manually |
-| Reload from file | `fetchJournalFromRepo` + `markSyncedFromRepo` |
+| Reload from file | `reloadFromFile()` → `replaceJournal` |
 | GitHub load | API GET → `replaceJournal` |
 | GitHub save | API PUT with `sha` → `markSyncedFromRepo` |
 
@@ -98,7 +99,8 @@ Hash-based SPA (no server rewrites needed for GitHub Pages).
 
 | Key | Purpose |
 |-----|---------|
-| `lernjournal-draft-v1` | Full journal JSON while editing |
+| `lernjournal-draft-v1` | Full journal JSON cache (aligned with file after load; updated on edit) |
+| `lernjournal-has-unsaved-edits` | Set when the user edits in the app (`_touch`) |
 | `lernjournal-miku-theme` | Active theme: `MinimalMiku`, `Concert`, `NightNeon`, `SnowMiku` |
 | `lernjournal-github-repo` | `owner/repo` for API sync |
 | `lernjournal-github-token` | Fine-grained PAT (Contents read/write) |

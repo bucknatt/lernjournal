@@ -39,7 +39,7 @@ Each entry covers one calendar week and includes:
 ## Data
 
 - **Source of truth:** [`data/journal.json`](data/journal.json) in the repository (versioned with Git).
-- **Draft cache:** browser `localStorage` (autosave while typing).
+- **Draft cache:** browser `localStorage` (autosave while typing). On startup the app loads the **file first**; if an older browser draft differs, choose **Datei behalten** or **Entwurf laden** in the banner.
 
 ## How to sync across multiple devices
 
