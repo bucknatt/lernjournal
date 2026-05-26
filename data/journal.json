@@ -16,6 +16,22 @@
       "goal2": "Mit Platform/Cloud Team klären: Self-Hosted-Runner ok? CI/CD Pipeline testen und auf main pushen.",
       "createdAt": "2026-05-21T12:00:00.000Z",
       "updatedAt": "2026-05-21T20:00:00.000Z"
+    },
+    {
+      "weekKey": "2026-W22",
+      "status": "draft",
+      "datum": "2026-05-26",
+      "done": "Diese Woche findet die Design System Week statt, weshalb ich diese Woche nicht an den SPDS Assets tasks weiterarbeiten kann.\nDie Topics sind: Token Proposal, Claryfying Roles and Responsibilites, Application Pattern Pattern, Next Milestone Planning, Copilot to speed up ticket writing, Aligning Icons with Text.",
+      "methods": "Ich habe die Action Items for den nächsten Monat in kleine Tasks heruntergebrochen, um eine klare, definierte Umsetzungen zu ermöglichen und einen konkreten Plan / Einstiegspunkt zu haben. ",
+      "learned": "Ich habe mich versucht bestmöglichst einzubringen, auch wenn ich noch wenig Erfahrungen und Berührungspunkte mit den bestehenden Theme habe. Ich habe aktiv mitgemacht und getraut Vorschläge zu machen. Ich habe gezielt Fragen gestellt, um mehr Kontext zu erhalten.",
+      "wentWell": "Ich konnte die zu besprechenden Topics gut nachvollziehen, Zusammenhänge erkennen zwischen und die nötigen Informationen durch Navigieren zwischen den einzelnen Figma-Boards holen.",
+      "wentPoorly": "Manchmal hatte ich zu wenig Kontext, um konstruktiv mich einbringen zu können.",
+      "helpedBy": "Vermehrt die Toolbar in Figma einzusetzen und die Ideen/Sticky Notes besser zu visualisieren, hat geholfen, eine klare Struktur zu geben und Zusammenhänge zu erkennen.",
+      "improvements": "Die Sticky Notes der anderen Teammitglieder besser verstehen, hinterfragen und nachvollziehen.",
+      "goal1": "Ferien für die Prüfungswoche einplanen.",
+      "goal2": "Ziele von Woche 21 aufgreifen.",
+      "createdAt": "2026-05-26T09:59:06.976Z",
+      "updatedAt": "2026-05-26T12:33:42.006Z"
     }
   ]
 }
