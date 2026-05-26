@@ -62,7 +62,7 @@ On conflicts (409): load first, then save again.
 
 ## Privacy
 
-Use a **private** GitHub repository. Journal content lives in `journal.json` and in Git history.
+The visibilty will be set to private GitHub repository. Journal content lives in `journal.json` and in Git history. During development phase, this repository is public.
 
 ### Optionally use GitHub Pages
 
