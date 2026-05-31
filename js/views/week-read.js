@@ -2,6 +2,7 @@ import { journalStore } from "../store/journal-store.js";
 import { formatWeekLabel } from "../utils/dates.js";
 import { FIELD_LABELS, REFLECTION_FIELDS } from "../models/journal.js";
 import { renderAppHeader, renderAppToolbar } from "./ui.js";
+import { clearContainer } from "../utils/dom.js";
 
 /**
  * @param {HTMLElement} container
@@ -9,7 +10,7 @@ import { renderAppHeader, renderAppToolbar } from "./ui.js";
  * @param {{ navigateTo: (hash: string) => void }} ctx
  */
 export function renderWeekRead(container, weekKey, ctx) {
-  container.innerHTML = "";
+  clearContainer(container);
 
   const entry = journalStore.getEntry(weekKey);
   if (!entry) {
@@ -31,7 +32,7 @@ export function renderWeekRead(container, weekKey, ctx) {
     backLabel: "← Dashboard"
   });
 
-  renderAppToolbar(container, ctx);
+  renderAppToolbar(container);
 
   const actions = document.createElement("div");
   actions.className = "btn-group";

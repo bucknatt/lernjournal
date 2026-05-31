@@ -2,8 +2,10 @@ import { renderDashboard } from "./views/dashboard.js";
 import { renderWeekEditor } from "./views/week-editor.js";
 import { renderWeekRead } from "./views/week-read.js";
 import { renderSearch } from "./views/search.js";
+import { scheduleAfterPointer } from "./utils/dom.js";
 
 let currentCleanup = null;
+const ROUTE_RENDER_KEY = "route";
 
 function parseRoute() {
   const hash = location.hash.slice(1) || "/";
@@ -34,12 +36,14 @@ function navigateTo(hash) {
   if (location.hash !== hash) {
     location.hash = hash;
   } else {
-    renderCurrentRoute();
+    scheduleRenderCurrentRoute();
   }
 }
 
-function renderCurrentRoute() {
+function renderCurrentRouteNow() {
   const app = document.getElementById("app");
+  if (!app) return;
+
   if (currentCleanup) {
     currentCleanup();
     currentCleanup = null;
@@ -64,9 +68,13 @@ function renderCurrentRoute() {
   }
 }
 
+function scheduleRenderCurrentRoute() {
+  scheduleAfterPointer(ROUTE_RENDER_KEY, renderCurrentRouteNow);
+}
+
 export function initRouter() {
-  window.addEventListener("hashchange", renderCurrentRoute);
-  renderCurrentRoute();
+  window.addEventListener("hashchange", scheduleRenderCurrentRoute);
+  scheduleRenderCurrentRoute();
 }
 
 export { navigateTo, parseRoute };

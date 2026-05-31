@@ -217,13 +217,12 @@ Reusable UI components.
 |---------|------|
 | `.btn`, `.btn-primary`, `.btn-ghost` | Buttons with Miku glow |
 | `.card`, `.card-grid`, `.hero` | Content containers |
-| `.badge`, `.badge-warn`, `.badge-success` | Status pills (incl. „Lokal geändert“) |
+| `.badge`, `.badge-warn`, `.badge-success` | Status pills („Abgeschlossen“ uses sun-tinted success) |
 | `.journey-*` | Horizontal week timeline nodes |
 | `.goal-chips` | Previous week’s goals display |
 | `.form-section` | Editor labels + inputs |
 | `.settings-panel` | Sync/backup/GitHub UI |
-| `.app-toolbar`, `.toolbar-search` | Top search + theme row |
-| `.theme-switcher` | Theme dropdown + cycle button |
+| `.app-toolbar`, `.theme-switcher` | Theme name + cycle button (right-aligned) |
 | `.search-*` | Search form, results list, `<mark>` highlights |
 | `.status-toast` | Temporary feedback messages |
 
@@ -381,7 +380,7 @@ Shared UI building blocks.
 |--------|------|
 | `showToast(message, type?)` | Fixed bottom-right notification (4s) |
 | `renderAppHeader(...)` | Title, subtitle, optional back link |
-| `renderAppToolbar(...)` | Toolbar search (optional) + theme switcher |
+| `renderAppToolbar(...)` | Theme switcher (current name + cycle button) |
 | `renderSettingsPanel(...)` | Export/import/reload, GitHub sync, PAT settings |
 
 #### `js/views/dashboard.js`
@@ -426,7 +425,7 @@ Displays all fields as text blocks; **Bearbeiten** → editor; draft/complete ba
 | Search form | Live debounced search (280ms) + submit |
 | URL sync | Updates hash with encoded query |
 | Results | Week label, field name, highlighted snippet, open button |
-| Toolbar | Theme only (`showSearch: false` to avoid duplicate bar) |
+| Toolbar | Theme switcher only (search form is on this page) |
 
 ---
 
@@ -480,13 +479,11 @@ CI: on push to `main`/`master`, deploys the **entire repo root** as GitHub Pages
 
 ---
 
-## Duplicate UI note (search)
-
-Two search inputs exist by design:
+## Search UI
 
 | Location | File | Purpose |
 |----------|------|---------|
-| **Toolbar** | `ui.js` → `renderAppToolbar` | Quick search from any main screen |
-| **Schnellsuche** | `dashboard.js` → `renderDashboardSearchPreview` | Prominent entry on home page |
+| **Schnellsuche** | `dashboard.js` → `renderDashboardSearchPreview` | Search from the home page |
+| **Search page** | `search.js` | Full results for `#/search/<query>` |
 
-Both navigate to `#/search/<query>` and use the same `searchEntries()` logic.
+Both navigate to `#/search/<query>` (min. 2 characters) and use `searchEntries()`.

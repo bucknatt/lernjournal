@@ -50,26 +50,11 @@ export function renderThemeSwitcher(parent, opts = {}) {
   const wrap = document.createElement("div");
   wrap.className = `theme-switcher${opts.compact ? " theme-switcher--compact" : ""}`;
 
-  const label = document.createElement("span");
-  label.className = "theme-switcher-label";
-  label.textContent = opts.compact ? "Theme" : "Miku Theme";
-  wrap.appendChild(label);
-
-  const select = document.createElement("select");
-  select.className = "theme-switcher-select";
-  select.setAttribute("aria-label", "Theme wählen");
-
-  for (const mode of THEME_MODES) {
-    const opt = document.createElement("option");
-    opt.value = mode;
-    opt.textContent = THEME_LABELS[mode];
-    if (mode === getTheme()) opt.selected = true;
-    select.appendChild(opt);
-  }
-
-  select.addEventListener("change", () => {
-    setTheme(/** @type {typeof THEME_MODES[number]} */ (select.value));
-  });
+  const nameEl = document.createElement("span");
+  nameEl.className = "theme-switcher-current";
+  nameEl.setAttribute("aria-live", "polite");
+  nameEl.textContent = THEME_LABELS[getTheme()];
+  wrap.appendChild(nameEl);
 
   const cycleBtn = document.createElement("button");
   cycleBtn.type = "button";
@@ -79,10 +64,10 @@ export function renderThemeSwitcher(parent, opts = {}) {
   cycleBtn.setAttribute("aria-label", "Theme wechseln");
   cycleBtn.onclick = () => {
     const next = cycleTheme();
-    select.value = next;
+    nameEl.textContent = THEME_LABELS[next];
   };
 
-  wrap.append(select, cycleBtn);
+  wrap.appendChild(cycleBtn);
   parent.appendChild(wrap);
   return wrap;
 }

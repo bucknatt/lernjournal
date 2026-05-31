@@ -46,6 +46,7 @@
 .btn-group {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 0.5rem;
 }
 
@@ -107,7 +108,10 @@
 }
 
 .badge {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.2;
   padding: 0.2rem 0.65rem;
   font-size: 0.75rem;
   font-weight: 700;
@@ -124,7 +128,9 @@
 }
 
 .badge-success {
-  background: color-mix(in srgb, var(--miku-accent) 45%, transparent);
+  color: var(--miku-week-range);
+  background: color-mix(in srgb, var(--palette-pop-sun) 22%, transparent);
+  border: 1px solid color-mix(in srgb, var(--palette-pop-sun) 40%, transparent);
 }
 
 /* Journey map */
@@ -391,46 +397,18 @@
   color: var(--miku-muted);
 }
 
-.data-source-badge {
-  font-size: 0.72rem;
-  font-weight: 700;
-  padding: 0.2rem 0.55rem;
-  border-radius: 999px;
-  white-space: nowrap;
-}
-
-.data-source-badge--file {
-  color: var(--miku-week-range);
-  border: 1px solid color-mix(in srgb, var(--palette-pop-sun) 35%, transparent);
-  background: color-mix(in srgb, var(--palette-pop-sun) 12%, transparent);
-}
-
-.data-source-badge--draft {
-  color: var(--miku-glow);
-  border: 1px solid color-mix(in srgb, var(--miku-pop) 40%, transparent);
-  background: color-mix(in srgb, var(--miku-pop) 15%, transparent);
-}
-
-/* App toolbar: theme + search */
+/* App toolbar: theme */
 .app-toolbar {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: 0.75rem;
   margin-bottom: 1.25rem;
   padding: 0.65rem 0.85rem;
   border-radius: var(--radius-lg);
   background: color-mix(in srgb, var(--miku-secondary-dark) 65%, transparent);
   border: 1px solid color-mix(in srgb, var(--miku-accent) 32%, transparent);
-}
-
-.toolbar-search {
-  display: flex;
-  flex: 1;
-  min-width: min(100%, 14rem);
-  gap: 0.5rem;
-  align-items: center;
 }
 
 .theme-switcher {
@@ -440,25 +418,10 @@
   flex-shrink: 0;
 }
 
-.theme-switcher-label {
-  font-size: 0.82rem;
+.theme-switcher-current {
+  font-size: 0.85rem;
   font-weight: 700;
   color: var(--miku-muted);
-}
-
-.theme-switcher-select {
-  font-family: var(--font-body);
-  font-size: 0.85rem;
-  padding: 0.4rem 0.55rem;
-  border-radius: var(--radius-sm);
-  border: 1px solid color-mix(in srgb, var(--miku-accent) 40%, transparent);
-  background: var(--miku-bg);
-  color: var(--miku-text);
-  cursor: pointer;
-}
-
-.theme-switcher--compact .theme-switcher-label {
-  display: none;
 }
 
 /* Search */

@@ -1,10 +1,19 @@
 import { journalStore } from "../store/journal-store.js";
 import { getWeekKey, formatWeekLabel } from "../utils/dates.js";
-import { renderAppHeader, renderAppToolbar, renderSettingsPanel, renderConflictBanner } from "./ui.js";
+import {
+  renderAppHeader,
+  renderAppToolbar,
+  renderSettingsPanel,
+  renderConflictBanner,
+  showToast
+} from "./ui.js";
 import { decorateDisplayTitle, decorateCardTitle } from "../utils/font-decor.js";
+import { clearContainer, scheduleAfterPointer } from "../utils/dom.js";
 
 /** @type {(() => void) | null} */
 let dashboardUnsub = null;
+
+const DASHBOARD_RENDER_KEY = "dashboard";
 
 /**
  * @param {HTMLElement} container
@@ -16,7 +25,7 @@ export function renderDashboard(container, ctx) {
     dashboardUnsub = null;
   }
 
-  container.innerHTML = "";
+  clearContainer(container);
 
   const state = journalStore.getState();
   const currentWeek = state.currentWeekKey;
@@ -31,7 +40,7 @@ export function renderDashboard(container, ctx) {
     subtitle: "Wochenrückblick & Selbstreflexion"
   });
 
-  renderAppToolbar(container, ctx);
+  renderAppToolbar(container);
   renderConflictBanner(container);
 
   const hero = document.createElement("section");
@@ -192,7 +201,7 @@ export function renderDashboard(container, ctx) {
   renderSettingsPanel(container, ctx);
 
   dashboardUnsub = journalStore.subscribe(() => {
-    renderDashboard(container, ctx);
+    scheduleAfterPointer(DASHBOARD_RENDER_KEY, () => renderDashboard(container, ctx));
   });
 
   return () => {
@@ -234,7 +243,10 @@ function renderDashboardSearchPreview(container, ctx) {
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     const q = input.value.trim();
-    if (q.length < 2) return;
+    if (q.length < 2) {
+      showToast("Mindestens 2 Zeichen für die Suche.", "error");
+      return;
+    }
     ctx.navigateTo(`#/search/${encodeURIComponent(q)}`);
   });
 

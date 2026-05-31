@@ -2,6 +2,7 @@ import { journalStore } from "../store/journal-store.js";
 import { getWeekKey, formatWeekLabel } from "../utils/dates.js";
 import { FIELD_LABELS, REFLECTION_FIELDS } from "../models/journal.js";
 import { renderAppHeader, renderAppToolbar, showToast } from "./ui.js";
+import { clearContainer } from "../utils/dom.js";
 
 const AUTOSAVE_MS = 2000;
 
@@ -11,7 +12,7 @@ const AUTOSAVE_MS = 2000;
  * @param {{ navigateTo: (hash: string) => void }} ctx
  */
 export function renderWeekEditor(container, weekKeyParam, ctx) {
-  container.innerHTML = "";
+  clearContainer(container);
 
   const weekKey = weekKeyParam || getWeekKey();
   const entry = journalStore.getOrCreateEntry(weekKey);
@@ -24,7 +25,7 @@ export function renderWeekEditor(container, weekKeyParam, ctx) {
     backLabel: "← Dashboard"
   });
 
-  renderAppToolbar(container, ctx);
+  renderAppToolbar(container);
 
   if (prev && (prev.goal1 || prev.goal2)) {
     const carry = document.createElement("aside");
@@ -144,7 +145,8 @@ export function renderWeekEditor(container, weekKeyParam, ctx) {
   let autosaveTimer = null;
 
   function collectEntry() {
-    const updated = { ...entry };
+    const base = journalStore.getEntry(weekKey) ?? entry;
+    const updated = { ...base };
     for (const key of fields) {
       updated[/** @type {keyof typeof updated} */ (key)] = inputs[key].value;
     }

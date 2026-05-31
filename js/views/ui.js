@@ -52,56 +52,14 @@ export function renderAppHeader(container, { title, subtitle, backHref, backLabe
 }
 
 /**
- * Global toolbar: theme switcher + optional quick search.
+ * Global toolbar: theme switcher.
  * @param {HTMLElement} container
- * @param {{ navigateTo: (hash: string) => void }} ctx
- * @param {{ showSearch?: boolean }} [opts]
  */
-export function renderAppToolbar(container, ctx, opts = {}) {
-  const showSearch = opts.showSearch !== false;
+export function renderAppToolbar(container) {
   const bar = document.createElement("div");
   bar.className = "app-toolbar";
 
-  if (showSearch) {
-    const searchWrap = document.createElement("form");
-    searchWrap.className = "toolbar-search";
-    searchWrap.setAttribute("role", "search");
-
-    const searchInput = document.createElement("input");
-    searchInput.type = "search";
-    searchInput.className = "search-input";
-    searchInput.placeholder = "Journal durchsuchen…";
-    searchInput.setAttribute("aria-label", "Journal durchsuchen");
-
-    searchWrap.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const q = searchInput.value.trim();
-      if (q.length < 2) {
-        showToast("Mindestens 2 Zeichen für die Suche.", "error");
-        return;
-      }
-      ctx.navigateTo(`#/search/${encodeURIComponent(q)}`);
-    });
-
-    searchWrap.appendChild(searchInput);
-
-    const searchBtn = document.createElement("button");
-    searchBtn.type = "submit";
-    searchBtn.className = "btn btn-small";
-    searchBtn.textContent = "Suchen";
-    searchWrap.appendChild(searchBtn);
-
-    bar.appendChild(searchWrap);
-  }
-
   renderThemeSwitcher(bar, { compact: true });
-
-  const state = journalStore.getState();
-  const source = document.createElement("span");
-  source.className = `data-source-badge data-source-badge--${state.dataSource}`;
-  source.textContent =
-    state.dataSource === "file" ? "Quelle: journal.json" : "Quelle: lokaler Entwurf";
-  bar.appendChild(source);
 
   container.appendChild(bar);
   return bar;
@@ -272,49 +230,6 @@ export function renderSettingsPanel(parent, ctx) {
 
   panel.appendChild(fileRow);
 
-  const ghRow = document.createElement("div");
-  ghRow.className = "btn-group";
-  ghRow.style.marginTop = "0.5rem";
-
-  const ghLoad = document.createElement("button");
-  ghLoad.type = "button";
-  ghLoad.className = "btn btn-small";
-  ghLoad.textContent = "Von GitHub laden";
-  ghLoad.onclick = async () => {
-    try {
-      const { loadJournalFromGithub } = await import("../api/github-sync.js");
-      const { journal } = await loadJournalFromGithub();
-      journalStore.replaceJournal(journal);
-      showToast("Von GitHub geladen.");
-      ctx.navigateTo(location.hash || "#/");
-    } catch (e) {
-      showToast(/** @type {Error} */ (e).message, "error");
-    }
-  };
-
-  const ghSave = document.createElement("button");
-  ghSave.type = "button";
-  ghSave.className = "btn btn-primary btn-small";
-  ghSave.textContent = "Nach GitHub speichern";
-  ghSave.onclick = async () => {
-    try {
-      const { saveJournalToGithub } = await import("../api/github-sync.js");
-      const { journal } = journalStore.getState();
-      await saveJournalToGithub(journal);
-      showToast("Auf GitHub gespeichert.");
-    } catch (e) {
-      showToast(/** @type {Error} */ (e).message, "error");
-    }
-  };
-
-  ghRow.append(ghLoad, ghSave);
-  panel.appendChild(ghRow);
-
-  const details = document.createElement("details");
-  const summary = document.createElement("summary");
-  summary.textContent = "GitHub API (optional)";
-  details.appendChild(summary);
-
   const cfg = journalStore.getGithubConfig();
 
   const repoLabel = document.createElement("label");
@@ -330,6 +245,79 @@ export function renderSettingsPanel(parent, ctx) {
   tokenInput.type = "password";
   tokenInput.placeholder = "github_pat_…";
   tokenInput.value = cfg.token;
+
+  function applyGithubInputsFromForm() {
+    if (repoInput.value.trim() || tokenInput.value.trim()) {
+      journalStore.setGithubConfig({
+        repo: repoInput.value,
+        token: tokenInput.value
+      });
+    }
+  }
+
+  const ghHint = document.createElement("p");
+  ghHint.className = "muted";
+  ghHint.style.fontSize = "0.85rem";
+  ghHint.style.margin = "0.75rem 0 0.5rem";
+  ghHint.textContent =
+    "Repository und Token unten ausfüllen; beim Laden/Speichern werden sie automatisch übernommen.";
+  panel.appendChild(ghHint);
+
+  const ghRow = document.createElement("div");
+  ghRow.className = "btn-group";
+
+  const ghLoad = document.createElement("button");
+  ghLoad.type = "button";
+  ghLoad.className = "btn btn-small";
+  ghLoad.textContent = "Von GitHub laden";
+  ghLoad.onclick = async () => {
+    const loadLabel = ghLoad.textContent;
+    ghLoad.disabled = true;
+    ghLoad.textContent = "Lädt…";
+    try {
+      applyGithubInputsFromForm();
+      const { loadJournalFromGithub } = await import("../api/github-sync.js");
+      const { journal } = await loadJournalFromGithub();
+      journalStore.replaceJournal(journal);
+      showToast("Von GitHub geladen.");
+      ctx.navigateTo(location.hash || "#/");
+    } catch (e) {
+      showToast(/** @type {Error} */ (e).message, "error");
+    } finally {
+      ghLoad.disabled = false;
+      ghLoad.textContent = loadLabel;
+    }
+  };
+
+  const ghSave = document.createElement("button");
+  ghSave.type = "button";
+  ghSave.className = "btn btn-primary btn-small";
+  ghSave.textContent = "Nach GitHub speichern";
+  ghSave.onclick = async () => {
+    const saveLabel = ghSave.textContent;
+    ghSave.disabled = true;
+    ghSave.textContent = "Speichert…";
+    try {
+      applyGithubInputsFromForm();
+      const { saveJournalToGithub } = await import("../api/github-sync.js");
+      const { journal } = journalStore.getState();
+      await saveJournalToGithub(journal);
+      showToast("Auf GitHub gespeichert.");
+    } catch (e) {
+      showToast(/** @type {Error} */ (e).message, "error");
+    } finally {
+      ghSave.disabled = false;
+      ghSave.textContent = saveLabel;
+    }
+  };
+
+  ghRow.append(ghLoad, ghSave);
+  panel.appendChild(ghRow);
+
+  const details = document.createElement("details");
+  const summary = document.createElement("summary");
+  summary.textContent = "GitHub API (optional)";
+  details.appendChild(summary);
 
   const saveCfg = document.createElement("button");
   saveCfg.type = "button";

@@ -2,6 +2,7 @@ import { journalStore } from "../store/journal-store.js";
 import { searchEntries, highlightSnippet } from "../utils/search.js";
 import { formatWeekLabel } from "../utils/dates.js";
 import { renderAppHeader, renderAppToolbar } from "./ui.js";
+import { clearContainer } from "../utils/dom.js";
 
 /**
  * @param {HTMLElement} container
@@ -9,7 +10,7 @@ import { renderAppHeader, renderAppToolbar } from "./ui.js";
  * @param {{ navigateTo: (hash: string) => void }} ctx
  */
 export function renderSearch(container, initialQuery, ctx) {
-  container.innerHTML = "";
+  clearContainer(container);
 
   renderAppHeader(container, {
     title: "Suche",
@@ -18,7 +19,7 @@ export function renderSearch(container, initialQuery, ctx) {
     backLabel: "← Dashboard"
   });
 
-  renderAppToolbar(container, ctx, { showSearch: false });
+  renderAppToolbar(container);
 
   const panel = document.createElement("section");
   panel.className = "search-panel card";
