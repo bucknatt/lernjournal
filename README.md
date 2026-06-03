@@ -6,22 +6,17 @@ Weekly learning journal for my Stagestelle including self-reflection, goals, and
 
 ```bash
 npm run dev
-# or: python3 -m http.server 8765
 ```
 
-Open [http://localhost:8765](http://localhost:8765). Do not open via `file://` or **fetch** for `data/journal.json` will fail.
+Opens [http://localhost:8765](http://localhost:8765). Do not open via `file://` or **fetch** for `data/journal.json` will fail.
 
-**Port already in use?** An old server may still be running. Either stop it:
+**Port already in use?** An old server may still be running. Stop it:
 
 ```bash
-fuser -k 8765/tcp    # or 5173/tcp
-# alternatively:
 kill $(lsof -t -i:8765)
 ```
 
-…or use another port: `python3 -m http.server 9000` → http://localhost:9000
-
-If you prefer: `npm run dev:5173` uses port 5173 explicitly.
+Alternatively, use `npm run dev:5173` to run on port 5173.
 
 ## Weekly reflection data fields
 
