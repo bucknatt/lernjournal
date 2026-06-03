@@ -231,7 +231,7 @@ function renderDashboardSearchPreview(container, ctx) {
   const input = document.createElement("input");
   input.type = "search";
   input.className = "search-input";
-  input.placeholder = "z. B. React, Pair Programming, Ziel…";
+  input.placeholder = "z. B. Angular, W3Schools, Ziele von letzter Wochel…";
   input.setAttribute("aria-label", "Alle Einträge durchsuchen");
 
   const btn = document.createElement("button");
