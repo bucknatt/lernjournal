@@ -32,6 +32,22 @@
       "goal2": "Ziele von Woche 21 aufgreifen.",
       "createdAt": "2026-05-26T09:59:06.976Z",
       "updatedAt": "2026-05-26T12:33:42.006Z"
+    },
+    {
+      "weekKey": "2026-W23",
+      "status": "complete",
+      "datum": "2026-06-01",
+      "done": "Diese Woche habe ich den Transfermodul-Bericht (BTI3404) für «CDN Modernization, Asset Distribution, and Observability Platform» ausgearbeitet und anhand von Feedback überarbeitet. Inhaltlich: Beschreibung der drei Meilensteine (GitHub/OIDC-Migration, Asset-Pipeline, Observability), kompakte Darstellung der geleisteten Arbeit (M1: postch/spds-assets, OIDC, Terraform über Inventory und Account-Repos; M2: bewusst pausiert; M3: Spring-Boot-Testimplementierung mit Dashboard/Export, AWS-IaC-Blueprint, Ministack/Lokalstack Emulation), messbare Resultate eingebaut (63'641 CloudFront-.gz-Logfiles Sep 2025–Mär 2026). Reflexionsteile «Was habe ich gelernt» und «Was würde ich anders machen» als Schwerpunkt des Berichts ausgebaut. Architekturarbeit und Herausforderungen (Governance, Multi-Repo-Terraform, Berechtigungen) stärker hervorgehoben.",
+      "methods": "Strukturierung nach BFH-Vorgabe (Topic, Arbeitsbeschreibung, Reflexion, Stunden). Abgleich mit dem, was im Analytics Repository gemacht wurde.  Metriken aus Export-JSON wurde genutzt, um konkrete Ergebnisse zu nennen. Es musste iterativ überarbeitet werden nach Review-Feedback (Fokus auf Ergebnisse statt offene Punkte, diplomatische Formulierung bei Scope-/Cloud-Entscheidungen).",
+      "learned": "Fachlich: Ein Bericht muss Ergebnisse und messbaren Nutzen vor Planungslücken stellen Technische Tiefe allein reicht nicht für Leser aus dem Zielpublikum z.B. Management. Persönlich: Die tatsächlich geleistete Arbeit positiver darstellen. Feedback einarbeiten, ohne den Bericht unnötig aufzublähen.",
+      "wentWell": "Die Reflexionsteile spiegeln gut wider, was das Projekt wirklich geprägt hat (dass es OIDC gibt über mehrere Repos, was für eine Permissionmatrix benötigt wird, Fazit aus Localstack-Detour). Konkrete Zahlen machen Milestone 3 verständlicher zum lesen. Die Tabelle «Value delivered / Remaining» wurde bewusst weggelassen, um nicht den Eindruck eines gescheiterten Projekts zu geben.",
+      "wentPoorly": "Erste Fassung war zu lang in Planning/Milestones und zu kurz in der Reflexion, ich musste mehrfach nachschärfen.",
+      "helpedBy": "Feedback von Raphy (Fokus Ergebnisse, Herausforderungen, Architektur) hat mir geholfen. Die bestehende Repos gaben Struktur und Anhalt, was umgesetzt wurde.",
+      "improvements": "Bericht vielleicht früher mit Reviewer abstimmen, bevor viel Text in die falsche Sektion fliesst. Metriken und Stunden von Anfang an in einer Statistik-Datei pflegen.",
+      "goal1": "Transfermodul-Bericht finalisieren und Unterschriften einholen.",
+      "goal2": "Offene M3-Punkte (TFE-Apply, E2E Validierung) weiterverfolgen.",
+      "createdAt": "2026-06-01T12:00:00.000Z",
+      "updatedAt": "2026-06-01T12:00:00.000Z"
     }
   ]
 }
