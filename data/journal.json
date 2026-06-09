@@ -48,6 +48,22 @@
       "goal2": "Offene M3-Punkte (TFE-Apply, E2E Validierung) weiterverfolgen.",
       "createdAt": "2026-06-01T12:00:00.000Z",
       "updatedAt": "2026-06-01T12:00:00.000Z"
+    },
+    {
+      "weekKey": "2026-W24",
+      "status": "complete",
+      "datum": "2026-06-09",
+      "done": "Diese Woche habe ich im Repository postch/spds-assets-analytics die AWS-Glue-Pipeline für die CloudFront-Log-Auswertung umgesetzt und die Terraform-Infrastruktur erweitert. Konkret: Glue-4.0-Spark-Job (cloudfront_aggregate_job.py), der gzip-CloudFront-Access-Logs aus dem bestehenden Logs-Bucket liest, User-Agent (ua_parser), Referrer, URI, Status und Edge-Location parst und monatlich aggregierte Parquet-Tabellen in den Analytics-Bucket schreibt (browser_monthly_usage, referrer_monthly_unique, resource_monthly_access sowie optionale Export- und Identity-Aggregationstabellen). Terraform ergänzt um Glue-Job-Definition, Upload der Glue-Artefakte und Geo-Mapping-CSV nach S3, IAM-Rollen für Glue ETL und Athena-Team-Queries, Athena-Workgroup mit Ergebnis-Pfad, KMS-Berechtigungen für den verschlüsselten Analytics-Bucket sowie acht Glue-Catalog-External-Tables. Bugfixes im Job (nach Copilot-Review): OOM bei distinct User-Agents, Epoch-Sekunden-zu-Timestamp-Konvertierung, KMS AccessDenied und String-Korrekturen. Geo-Edge-Location-Map wurde mit Abgleich aus den Logs erweitert. Danach habe ich einen PR geöffnet und den Feature-Branch feat/glue-pipeline mit main gemerged.",
+      "methods": "Terraform (S3, KMS, Glue Catalog, Glue Job, IAM Policies, Athena Workgroup). PySpark/Glue 4.0 für ETL (binaryFile-Reader, RDD-Parsing, Parquet-Partitionierung nach month=). User-Agent-Parsing mit ua_parser. Geo-Auflösung über broadcasted Edge-Location-Map. Iterative Fehlersuche bei Glue-Lauf (KMS, Speicher, Timestamp-Typen). Abgleich mit bestehender Spring-Boot-Testimplementierung als Referenz für Aggregationslogik.",
+      "learned": "Fachlich: Wie CloudFront-Logs im gzip-Tab-Format geparst werden (#Fields-Header, Feldindizes) und warum distinct User-Agents in Spark teuer sein können (collect/distinct → führt zu OOM). Glue-Jobs brauchen explizite KMS-Rechte auf dem Ziel-Bucket, nicht nur S3. Athena-External-Tables mit Partition-Key month erfordern nach jedem Glue-Lauf MSCK REPAIR TABLE. Persönlich: Ich musste für über die Infrastruktur (Terraform) und ETL-Logik (Python/Spark) lesen und planen. Dies war alles neu für mich.",
+      "wentWell": "Die Aggregationslogik aus der Testimplementierung liess sich in Spark/Glue portieren (Browser-, Referrer-, Resource-Monatsaggregationen, Identity-Key mit IP/Referrer/Browser/10s-Zeitbucket). Terraform-Module für Glue, IAM und Athena sind konsistent benannt (project_name-environment). Die Geo-Mapping-Erweiterung aus echten Log-Edge-Locations verbessert die Länderzuordnung.",
+      "wentPoorly": "Mehrere Iterationen nötig wegen Laufzeitfehlern (KMS, OOM, Timestamp-Typ). Noch nicht E2E gegen int validiert (TFE-Apply und erster Glue-Job-Run mit echten Logs ausstehend).",
+      "helpedBy": "Bestehende Spring-Boot-Testimplementierung und Export-JSON als Referenz für erwartete Tabellen und Metriken. Diese gaben einen konkreten Plan, der in Terraform umgesetzt werden musste.",
+      "improvements": "Glue-Job in int mit einem Testmonat (z. B. 2026-03) laufen lassen und Athena-Queries gegen curated/ validieren. Falls Zeit erlaubt: QuickSight oder Excel-Export als nächster Schritt planen.",
+      "goal1": "Terraform in int deployen (TFE-Apply) und Glue-Job mit echten CloudFront-Logs testen.",
+      "goal2": "Athena-Abfragen gegen curated-Tabellen validieren und Ergebnisse mit Testimplementierung abgleichen.",
+      "createdAt": "2026-06-09T12:00:00.000Z",
+      "updatedAt": "2026-06-09T12:00:00.000Z"
     }
   ]
 }
