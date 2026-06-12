@@ -243,7 +243,7 @@ export function renderSettingsPanel(parent, ctx) {
   tokenLabel.textContent = "Github Access Token (Contents read/write)";
   const tokenInput = document.createElement("input");
   tokenInput.type = "password";
-  tokenInput.placeholder = "github_pat_…";
+  tokenInput.placeholder = "e.g., github_pat_11A2B3C4D...";
   tokenInput.value = cfg.token;
 
   function applyGithubInputsFromForm() {
