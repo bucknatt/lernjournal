@@ -240,7 +240,7 @@ export function renderSettingsPanel(parent, ctx) {
   repoInput.value = cfg.repo;
 
   const tokenLabel = document.createElement("label");
-  tokenLabel.textContent = "Fine-grained PAT (Contents read/write)";
+  tokenLabel.textContent = "Github Access Token (Contents read/write)";
   const tokenInput = document.createElement("input");
   tokenInput.type = "password";
   tokenInput.placeholder = "github_pat_…";

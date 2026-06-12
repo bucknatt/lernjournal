@@ -5,7 +5,7 @@ const JOURNAL_PATH = "data/journal.json";
 
 /**
  * @param {string} repo owner/name
- * @param {string} token PAT
+ * @param {string} token GitHub Personal Access Token
  */
 async function githubFetch(repo, token, path, options = {}) {
   const url = `https://api.github.com/repos/${repo}/contents/${path}`;

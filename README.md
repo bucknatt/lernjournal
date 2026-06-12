@@ -45,7 +45,7 @@ Each entry covers one calendar week and includes:
 2. Edit in the app (cached locally).
 3. **After writing:**
    - **Git:** **Export JSON** → replace `data/journal.json` → `git add data/journal.json && git commit -m "journal W20" && git push`
-   - **GitHub API:** configure repo + PAT in settings → **Save to GitHub**
+   - **GitHub API:** configure repo + Token in settings → **Save to GitHub**
 
 ### Optionally use GitHub API
 

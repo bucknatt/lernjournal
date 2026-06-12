@@ -104,7 +104,7 @@ Clearing dirty state:
 | `lernjournal-has-unsaved-edits` | Set when the user edits in the app (`_touch`)                           |
 | `lernjournal-miku-theme`        | Active theme: `MinimalMiku`, `Concert`, `NightNeon`, `SnowMiku`         |
 | `lernjournal-github-repo`       | `owner/repo` for API sync                                               |
-| `lernjournal-github-token`      | Fine-grained PAT (Contents read/write)                                  |
+| `lernjournal-github-token`      | Fine-grained Access Token (Contents read/write)                         |
 | `lernjournal-github-sha`        | Git blob SHA for optimistic updates on PUT                              |
 
 Linked local-file sync metadata is stored in **IndexedDB** (`lernjournal-fs-v1`, store `kv`, key `journal-file-handle`), not in `localStorage`.
@@ -172,7 +172,16 @@ License and attribution notes for bundled fonts.
 ```json
 {
   "version": 1,
-  "entries": [ /* WeeklyEntry objects */ ]
+  "entries": [
+    {
+      "weekKey": "2026-W20",
+      "status": "draft",
+      "datum": "2026-05-18",
+      "done": "Diese Woche habe ich an meinem Lernjournal gearbeitet.",
+      "methods": "Vanilla JS, GitHub Pages, File System Access API",
+      "learned": "Wie man eine einfache Webanwendung mit Vanilla JS erstellt und auf GitHub Pages bereitstellt."
+    }
+  ]
 }
 ```
 
@@ -462,24 +471,24 @@ Searches: all reflection fields, goals, `datum`, and `weekKey`. One best match p
 
 Shared UI building blocks.
 
-| Export                      | Role                                            |
-|-----------------------------|-------------------------------------------------|
-| `showToast(message, type?)` | Fixed bottom-right notification (4s)            |
-| `renderAppHeader(...)`      | Title, subtitle, optional back link             |
-| `renderAppToolbar(...)`     | Theme switcher (current name + cycle button)    |
-| `renderSettingsPanel(...)`  | Export/import/reload, GitHub sync, PAT settings |
+| Export                      | Role                                                     |
+|-----------------------------|----------------------------------------------------------|
+| `showToast(message, type?)` | Fixed bottom-right notification (4s)                     |
+| `renderAppHeader(...)`      | Title, subtitle, optional back link                      |
+| `renderAppToolbar(...)`     | Theme switcher (current name + cycle button)             |
+| `renderSettingsPanel(...)`  | Export/import/reload, GitHub sync, Access Token settings |
 
 #### `js/views/dashboard.js`
 
 Main **journey map** screen (`#/`).
 
-| Section        | Role                                                       |
-|----------------|------------------------------------------------------------|
-| Hero           | Current week label, CTA (write/continue/view), dirty badge |
-| Card grid      | Streak, last week summary, goals from previous week        |
-| Schnellsuche   | Large search form (navigates to `#/search/<query>`)        |
-| Journey track  | Clickable week nodes: empty / draft / complete / current   |
-| Settings panel | Sync & backup (from `ui.js`)                               |
+| Section        | Role                                                                                        |
+|----------------|---------------------------------------------------------------------------------------------|
+| Hero           | Current week label, Call To Action (write/continue/view), dirty badge                       |
+| Card grid      | Streak (number of consecutive completed weeks), last week summary, goals from previous week |
+| Schnellsuche   | Large search form (navigates to `#/search/<query>`)                                         |
+| Journey track  | Clickable week nodes: empty / draft / complete / current                                    |
+| Settings panel | Sync & backup (from `ui.js`)                                                                |
 
 Subscribes to `journalStore` to re-render on changes (with unsubscribe guard).
 
