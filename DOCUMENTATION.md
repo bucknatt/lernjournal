@@ -185,7 +185,7 @@ License and attribution notes for bundled fonts.
 }
 ```
 
-Committed to the repository. As this ia personal content, I should consider to make this repo private.
+Committed to the repository. As this is personal content, I should consider to make this repo private.
 
 ---
 
@@ -193,7 +193,7 @@ Committed to the repository. As this ia personal content, I should consider to m
 
 #### `css/miku-tokens.css`
 
-Miku Hybrid color system (derived from the [Obsidian Miku Hybrid](https://community.obsidian.md/plugins/miku-plugin-hybrid) theme/plugin style source). CHECK IT OUT!!! :)
+Miku Hybrid color system (derived from my [Obsidian Miku Hybrid](https://community.obsidian.md/plugins/miku-plugin-hybrid) theme/plugin style source). CHECK IT OUT!!! :)
 
 | Section                               | Role                                                                                                              |
 |---------------------------------------|-------------------------------------------------------------------------------------------------------------------|
@@ -388,7 +388,7 @@ Every write attempt calls `queryPermission({ mode: "readwrite" })`. If the resul
 
 ##### Known issues and trade-offs
 
-The logic to store the handle in IndexedDB permanently while requiring a per-session permission re-grant is kind a trade-off. The idea is, that users do not need to re-pick the file after every restart, but they do need to confirm write access once per session. Anyhow, the downside is that this split creates several edge-case problems in the current implementation:
+The logic to store the handle in IndexedDB permanently while requiring a per-session permission re-grant is kinda trade-off. The idea is, that users do not need to re-pick the file after every restart, but they do need to confirm write access once per session. Anyhow, the downside is that this split creates several edge-case problems in the current implementation:
 
 | Problem                                     | Root cause                                                                                                                                       | Effect                                                                                                                                                        |
 |---------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|
