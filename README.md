@@ -2,6 +2,8 @@
 
 Weekly learning journal for my Stagestelle including self-reflection, goals, and a journey-map like UI. But that's not enough. Everything is styled in my favourite futuristc Hatsune Mikue theme!
 
+Interested to learn more about Hatsune Miku theme? Check out my other project, [Hatsune Miku plugin/theme](https://community.obsidian.md/plugins/miku-plugin-hybrid) for Obsidian! 
+
 ## Run locally
 
 ```bash
